@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { SiteService } from '../../services/site.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-site',
@@ -31,7 +33,9 @@ export class AddSiteComponent {
   constructor(
     private _formBuilder: FormBuilder, 
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private siteService: SiteService,
+    private auth: AuthService
   ) {
     this.generalFormGroup = this._formBuilder.group({
       nom: ['', Validators.required],
@@ -51,20 +55,37 @@ export class AddSiteComponent {
     });
   }
 
-  submit() {
+  async submit() {
     const payload = {
       ...this.generalFormGroup.value,
       ...this.infraFormGroup.value,
       ...this.energyFormGroup.value
     };
 
-    // Simulate API error as requested by the user for testing
-    setTimeout(() => {
-      this.snackBar.open("Erreur lors de la génération de l'analyse : Données incomplètes.", "Réessayer", {
-        duration: 5000,
-        panelClass: ['error-snackbar']
+    try {
+      const session = await this.auth.getSession();
+      const headers = {
+        'Authorization': `Bearer ${session?.access_token}`
+      };
+
+      this.siteService.createSite(payload, headers).subscribe({
+        next: (site) => {
+          this.snackBar.open("Site ajouté avec succès !", "OK", {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.snackBar.open("Erreur lors de l'ajout du site.", "Réessayer", {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+          console.error(err);
+        }
       });
-      console.error("Simulation d'erreur activée par l'utilisateur.");
-    }, 1000);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }

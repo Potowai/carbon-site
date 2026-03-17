@@ -6,8 +6,8 @@
         class="w-12 h-12 bg-[#10b981] rounded-xl flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.4)] rotate-3">
         <span class="font-black text-black text-2xl">C</span>
       </div>
-      <span class="text-2xl font-black tracking-tighter uppercase italic">CarbonSite <span
-          class="text-[#10b981]">Pro</span></span>
+      <span class="text-2xl font-black tracking-tighter uppercase italic">Carbon<span
+          class="text-[#10b981]">Site</span> <span class="bg-white text-black px-2 py-0.5 rounded ml-1 not-italic text-sm">PRO</span></span>
     </div>
     <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
       <a href="#" class="hover:text-[#10b981] transition-colors">Solutions</a>
@@ -46,12 +46,12 @@
           Nouvelle Certification RE2020 Disponible
         </div>
 
-        <h1 class="text-6xl lg:text-8.5xl font-black leading-[0.9] tracking-tighter">
-          PILOTAGE <br>
+        <h1 class="text-6xl lg:text-9xl font-black leading-[0.85] tracking-tighter">
+          ACTIVATE <br>
           <span
-            class="text-transparent bg-clip-text bg-gradient-to-r from-[#10b981] via-[#34d399] to-[#10b981] animate-gradient-x">CARBONE</span>
+            class="text-transparent bg-clip-text bg-gradient-to-br from-[#10b981] via-[#34d399] to-[#60a5fa] animate-gradient-x">SUSTAINABLE</span>
           <br>
-          HAUTE PRÉCISION
+          IMPACT
         </h1>
 
         <p class="text-gray-400 text-lg lg:text-xl leading-relaxed max-w-lg">
@@ -90,17 +90,17 @@
 
           <!-- Form Header -->
           <div class="mb-8">
-            <h2 class="text-3xl font-black mb-2">{{ isLogin ? 'Bon retour' : 'Rejoindre Pro' }}</h2>
-            <div class="h-1 w-12 bg-carbon-primary rounded-full"></div>
+            <h2 class="text-3xl font-black mb-2 tracking-tight">{{ isLogin ? 'Access Portal' : 'Join the Elite' }}</h2>
+            <div class="h-1.5 w-12 bg-gradient-to-r from-[#10b981] to-[#34d399] rounded-full"></div>
           </div>
 
-          <form (submit)="handleSubmit()" class="space-y-6 text-black">
+          <form (submit)="handleSubmit()" class="space-y-6">
             <div class="space-y-1.5">
               <label class="text-[10px] font-black uppercase tracking-[0.2em] ml-1">Email
                 Entreprise</label>
               <div class="relative group">
                 <input type="email" [(ngModel)]="email" name="email" required
-                  class="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 focus:border-carbon-primary focus:bg-black/60 outline-none transition-all placeholder:text-gray-700 text-sm text-black"
+                  class="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 focus:border-[#10b981] focus:bg-black/60 outline-none transition-all placeholder:text-gray-600 text-sm text-white"
                   placeholder="nom@entreprise.com">
               </div>
             </div>
@@ -108,7 +108,7 @@
             <div class="space-y-1.5">
               <label class="text-[10px] font-black uppercase tracking-[0.2em] ml-1">Mot de passe</label>
               <input type="password" [(ngModel)]="password" name="password" required
-                class="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 focus:border-carbon-primary focus:bg-black/60 outline-none transition-all placeholder:text-gray-700 text-sm"
+                class="w-full bg-black/40 border border-white/5 rounded-2xl px-5 py-4 focus:border-[#10b981] focus:bg-black/60 outline-none transition-all placeholder:text-gray-600 text-sm text-white"
                 placeholder="••••••••">
             </div>
 

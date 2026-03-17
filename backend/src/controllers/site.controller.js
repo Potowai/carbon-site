@@ -24,7 +24,14 @@ const getAllSites = async (req, res, next) => {
 
 const createSite = async (req, res, next) => {
   try {
-    const { nom, surface_m2, type } = req.body;
+    const { 
+      nom, 
+      surface_m2, 
+      nb_employes, 
+      parking_sous_sol, 
+      parking_sous_dalle, 
+      parking_aerien 
+    } = req.body;
     const userId = req.auth?.userId; 
 
     const { data: site, error } = await supabase
@@ -32,7 +39,11 @@ const createSite = async (req, res, next) => {
       .insert([
         { 
           nom, 
-          surface_m2: parseFloat(surface_m2), 
+          surface_m2: parseFloat(surface_m2),
+          nb_employes: parseInt(nb_employes) || 0,
+          parking_sous_sol: parseInt(parking_sous_sol) || 0,
+          parking_sous_dalle: parseInt(parking_sous_dalle) || 0,
+          parking_aerien: parseInt(parking_aerien) || 0,
           user_id: userId 
         }
       ])

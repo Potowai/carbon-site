@@ -1,6 +1,6 @@
-const supabase = require('../config/supabase');
+const jwt = require('jsonwebtoken');
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
   
   if (!authHeader) {
@@ -10,17 +10,13 @@ const authMiddleware = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
   
   try {
-    const { data: { user }, error } = await supabase.auth.getUser(token);
+    const decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET);
     
-    if (error || !user) {
-      throw new Error('Invalid token or user not found');
-    }
-
-    // On injecte l'utilisateur dans la requête
-    req.auth = { userId: user.id, email: user.email };
+    // Supabase JWTs contain the user ID in the 'sub' field
+    req.auth = { userId: decoded.sub, email: decoded.email };
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Unauthorized: ' + err.message });
+    res.status(401).json({ message: 'Unauthorized: Invalid token' });
   }
 };
 

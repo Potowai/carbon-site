@@ -123,3 +123,40 @@ body {
   border: 1px solid rgba(255,255,255,0.1) !important;
   border-radius: 12px !important;
 }
+/* Ngx Charts Legend Customization */
+.ngx-charts {
+  .legend-title {
+    color: #94a3b8 !important;
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.1em !important;
+  }
+  .legend-items-container {
+    width: auto !important;
+    .legend-item {
+      color: #94a3b8 !important;
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      &:hover {
+        color: white !important;
+      }
+      .item-label {
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        max-width: none !important;
+      }
+    }
+  }
+}
+.chart-legend {
+  width: auto !important;
+  .legend-labels {
+    background: transparent !important;
+    width: auto !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+}

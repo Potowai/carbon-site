@@ -29,7 +29,6 @@ CarbonSite est une **Progressive Web App (PWA)** mobile-first conçue pour estim
 ### 1. Prérequis
 - Node.js 20+
 - Un compte [Supabase](https://supabase.com)
-- Un compte [Clerk](https://clerk.com)
 
 ### 2. Configuration du Backend
 ```bash
@@ -40,8 +39,6 @@ Créez un fichier `.env` à la racine du dossier `backend` :
 ```env
 SUPABASE_URL=votre_url_supabase
 SUPABASE_ANON_KEY=votre_clé_anon
-CLERK_PUBLISHABLE_KEY=votre_clé_publique
-CLERK_SECRET_KEY=votre_clé_secrète
 PORT=3000
 ```
 

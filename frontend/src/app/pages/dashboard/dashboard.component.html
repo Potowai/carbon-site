@@ -13,7 +13,12 @@
       </h1>
     </div>
 
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-4 lg:gap-6">
+      <a routerLink="/sites"
+        class="bg-white/10 hover:bg-[#10b981] hover:text-white text-white font-black py-2.5 px-6 rounded-xl transition-all border border-white/20 text-xs uppercase tracking-widest flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+        Consulter un site
+      </a>
       <a routerLink="/add-site"
         class="bg-[#10b981] hover:bg-[#059669] text-black font-black py-2.5 px-6 rounded-xl transition-all shadow-lg text-xs uppercase tracking-widest">
         + Nouveau Site
@@ -93,11 +98,15 @@
     <div class="lg:col-span-2 bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
       <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Évolution des Émissions <span
           class="text-gray-500 text-sm ml-2 font-medium">(tCO₂e / mois)</span></h3>
-      <div class="h-[300px]">
-        <ngx-charts-area-chart [scheme]="colorScheme" [results]="carbonTrend" [gradient]="true" [xAxis]="true"
-          [yAxis]="true" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false" [autoScale]="true"
+      <div class="h-[300px] flex items-center justify-center">
+        <ngx-charts-area-chart *ngIf="carbonTrend.length > 0 && carbonTrend[0]?.series?.length > 0; else noTrend"
+          [scheme]="colorScheme" [results]="carbonTrend" [gradient]="true" [xAxis]="true"
+          [yAxis]="true" [legend]="true" [legendTitle]="''" [showXAxisLabel]="false" [showYAxisLabel]="false" [autoScale]="true"
           [animations]="true">
         </ngx-charts-area-chart>
+        <ng-template #noTrend>
+          <div class="text-gray-600 text-sm font-medium uppercase tracking-widest italic">Aucune donnée d'évolution disponible</div>
+        </ng-template>
       </div>
     </div>
 
@@ -105,9 +114,13 @@
     <div class="bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
       <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Répartition Matériaux</h3>
       <div class="h-[300px] flex items-center justify-center">
-        <ngx-charts-pie-chart [scheme]="colorScheme" [results]="materialDistribution" [gradient]="false" [legend]="true"
-          [legendTitle]="''" [labels]="false" [doughnut]="true" [animations]="true">
+        <ngx-charts-pie-chart *ngIf="materialDistribution.length > 0; else noDist"
+          [scheme]="colorScheme" [results]="materialDistribution" [gradient]="false" [legend]="true"
+          [legendPosition]="LegendPosition.Below" [legendTitle]="'Répartition'" [labels]="false" [doughnut]="true" [animations]="true">
         </ngx-charts-pie-chart>
+        <ng-template #noDist>
+          <div class="text-gray-600 text-sm font-medium uppercase tracking-widest italic text-center">Répartition non disponible</div>
+        </ng-template>
       </div>
     </div>
   </section>
