@@ -26,8 +26,9 @@ html {
 :root {
   --app-bg: #0b0f19;
   --app-text: #f8fafc;
-  --app-muted: #94a3b8;
-  --app-muted-2: rgba(148, 163, 184, 0.75);
+  /* Muted text is intentionally brighter for readability (a11y) */
+  --app-muted: #dbdbdb;
+  --app-muted-2: rgba(219, 219, 219, 0.85);
   --app-border: rgba(255, 255, 255, 0.08);
   --app-panel: rgba(255, 255, 255, 0.03);
   --app-card: rgba(22, 27, 39, 0.80);
@@ -167,6 +168,11 @@ html.a11y-large-text {
 
 html.a11y-high-contrast body {
   color: var(--app-text) !important;
+}
+
+html.a11y-high-contrast {
+  --app-muted: var(--app-text);
+  --app-muted-2: var(--app-text);
 }
 
 html.a11y-high-contrast .app-panel,

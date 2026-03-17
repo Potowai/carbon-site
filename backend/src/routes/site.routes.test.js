@@ -5,11 +5,9 @@ jest.mock('../controllers/site.controller', () => ({
   getGlobalDashboard: jest.fn(),
 }));
 
-jest.mock('../middlewares/auth', () => jest.fn((req, res, next) => next()));
 
 const router = require('./site.routes');
 const siteController = require('../controllers/site.controller');
-const authMiddleware = require('../middlewares/auth');
 
 const findRoute = (path, method) =>
   router.stack.find(
@@ -24,12 +22,11 @@ describe('site routes', () => {
     expect(route.route.stack[0].handle).toBe(siteController.getAllSites);
   });
 
-  it('registers POST / with auth middleware then createSite', () => {
+  it('registers POST / with createSite controller', () => {
     const route = findRoute('/', 'post');
 
     expect(route).toBeDefined();
-    expect(route.route.stack[0].handle).toBe(authMiddleware);
-    expect(route.route.stack[1].handle).toBe(siteController.createSite);
+    expect(route.route.stack[0].handle).toBe(siteController.createSite);
   });
 
   it('registers POST /estimate with estimateCarbon controller', () => {

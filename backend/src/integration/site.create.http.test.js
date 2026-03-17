@@ -2,13 +2,6 @@ jest.mock('../config/supabase', () => ({
   from: jest.fn(),
 }));
 
-jest.mock('../middlewares/auth', () =>
-  jest.fn((req, _res, next) => {
-    req.auth = { userId: 'user-test', email: 'test@example.com' };
-    next();
-  })
-);
-
 const request = require('supertest');
 const express = require('express');
 const router = require('../routes/site.routes');
@@ -34,7 +27,6 @@ describe('POST /api/sites (HTTP)', () => {
       parking_sous_dalle: 1,
       parking_aerien: 3,
       total_carbon_tons: 55,
-      user_id: 'user-test',
     };
 
     const single = jest.fn().mockResolvedValue({ data: createdSite, error: null });
@@ -57,7 +49,6 @@ describe('POST /api/sites (HTTP)', () => {
 
     const res = await request(app)
       .post('/api/sites')
-      .set('Authorization', 'Bearer test-token')
       .send(payload);
 
     expect(res.status).toBe(201);
@@ -71,7 +62,6 @@ describe('POST /api/sites (HTTP)', () => {
         parking_sous_sol: 2,
         parking_sous_dalle: 1,
         parking_aerien: 3,
-        user_id: 'user-test',
       }),
     ]);
   });

@@ -23,8 +23,8 @@ export class SiteService {
     );
   }
 
-  createSite(siteData: any, headers: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, siteData, { headers }).pipe(
+  createSite(siteData: any, headers?: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, siteData, headers ? { headers } : {}).pipe(
       map(response => response.data)
     );
   }

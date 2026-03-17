@@ -70,7 +70,20 @@ const createSite = async (req, res, next) => {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      // Supabase/PostgREST can fail with schema cache errors when a column is missing.
+      // Provide an actionable message for hackathon setup.
+      const msg = String(error?.message || '');
+      if (msg.includes("total_carbon_tons") && msg.includes("schema cache")) {
+        const e = new Error(
+          "La colonne 'total_carbon_tons' est manquante dans la table 'sites'. " +
+          "Exécutez la migration SQL: backend/migrations/2026-03-17_add_total_carbon_tons.sql (Supabase SQL Editor), puis réessayez."
+        );
+        e.statusCode = 500;
+        throw e;
+      }
+      throw error;
+    }
     console.log('Site Created Successfully:', site);
     res.status(201).json({ success: true, data: site });
   } catch (error) {

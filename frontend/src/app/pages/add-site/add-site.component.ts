@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SiteService } from '../../services/site.service';
-import { AuthService } from '../../services/auth.service';
 import { LucideAngularModule, Building2, LayoutDashboard, ChevronLeft } from 'lucide-angular';
 
 @Component({
@@ -46,8 +45,7 @@ export class AddSiteComponent {
     private _formBuilder: FormBuilder, 
     private router: Router,
     private snackBar: MatSnackBar,
-    private siteService: SiteService,
-    private auth: AuthService
+    private siteService: SiteService
   ) {
     this.generalFormGroup = this._formBuilder.group({
       nom: ['', Validators.required],
@@ -76,22 +74,7 @@ export class AddSiteComponent {
     };
 
     try {
-      const session = await this.auth.getSession();
-      
-      if (!session || !session.access_token) {
-        this.isSubmitting = false;
-        this.snackBar.open("Session expirée ou non trouvée. Veuillez vous reconnecter.", "OK", {
-          duration: 5000,
-          panelClass: ['error-snackbar']
-        });
-        return;
-      }
-
-      const headers = {
-        'Authorization': `Bearer ${session.access_token}`
-      };
-
-      this.siteService.createSite(payload, headers).subscribe({
+      this.siteService.createSite(payload).subscribe({
         next: (response: any) => {
           this.isSubmitting = false;
           this.analysisResult = response.data;
@@ -107,10 +90,7 @@ export class AddSiteComponent {
         },
         error: (err) => {
           this.isSubmitting = false;
-          const errorMsg =
-            err?.status === 401
-              ? "Non autorisé (session expirée). Veuillez vous reconnecter puis réessayer."
-              : (err.error?.message || "Erreur lors de l'ajout du site.");
+          const errorMsg = err.error?.message || "Erreur lors de l'ajout du site.";
           this.snackBar.open(errorMsg, "Réessayer", {
             duration: 5000,
             panelClass: ['error-snackbar']
