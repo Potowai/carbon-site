@@ -14,7 +14,7 @@
 
     <div class="hidden md:flex items-center gap-3 bg-black/40 px-4 py-2 rounded-full border border-white/10">
       <div class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></div>
-      <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Calculateur RE2020</span>
+      <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 text-[#DBDBDB]">Calculateur RE2020</span>
     </div>
   </header>
 
@@ -31,23 +31,23 @@
           <form [formGroup]="generalFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
               <h2 class="text-2xl font-black tracking-tight">Identité du projet</h2>
-              <p class="text-gray-500 text-sm">Définissez les bases de votre évaluation carbone.</p>
+              <p class="text-gray-500 text-sm text-[#DBDBDB]">Définissez les bases de votre évaluation carbone.</p>
             </div>
 
             <div class="grid grid-cols-1 gap-6">
               <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Nom de l'opération</mat-label>
+                <mat-label class="text-[#DBDBDB]">Nom de l'opération</mat-label>
                 <input matInput formControlName="nom" placeholder="Ex: Campus Via Silva" required>
               </mat-form-field>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>Surface Plancher (m²)</mat-label>
+                  <mat-label class="text-[#DBDBDB]">Surface Plancher (m²)</mat-label>
                   <input matInput type="number" formControlName="surface_m2" placeholder="Ex: 5000">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>Capacité (Employés)</mat-label>
+                  <mat-label class="text-[#DBDBDB]">Capacité (Employés)</mat-label>
                   <input matInput type="number" formControlName="nb_employes" placeholder="Ex: 150">
                 </mat-form-field>
               </div>
@@ -68,10 +68,10 @@
           <form [formGroup]="infraFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
               <h2 class="text-2xl font-black tracking-tight">Ouvrages & Parkings</h2>
-              <p class="text-gray-500 text-sm">Les infrastructures souterraines sont les plus impactantes.</p>
+              <p class="text-gray-500 text-sm text-[#DBDBDB]">Les infrastructures souterraines sont les plus impactantes.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Places sous-sol</mat-label>
                 <input matInput type="number" formControlName="parking_sous_sol">
@@ -91,7 +91,7 @@
             </div>
 
             <div class="flex justify-between items-center pt-4">
-              <button matStepperPrevious class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
+              <button matStepperPrevious class="text-gray-500 text-[#DBDBDB] hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
                 Retour
               </button>
               <button matStepperNext class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
@@ -108,7 +108,7 @@
           <form [formGroup]="energyFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
               <h2 class="text-2xl font-black tracking-tight">Performance Énergétique</h2>
-              <p class="text-gray-500 text-sm">Consommations prévisionnelles annuelles.</p>
+              <p class="text-gray-500 text-sm text-[#DBDBDB]">Consommations prévisionnelles annuelles.</p>
             </div>
 
             <div class="grid grid-cols-1 gap-6">
@@ -131,7 +131,7 @@
             </div>
 
             <div class="flex justify-between items-center pt-6">
-              <button matStepperPrevious class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
+              <button matStepperPrevious class="text-gray-500 text-[#DBDBDB] hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
                 Retour
               </button>
               <button (click)="submit()" class="premium-btn primary px-12 py-5 rounded-2xl font-black uppercase text-sm tracking-[0.2em] shadow-glow">

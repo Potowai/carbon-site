@@ -40,11 +40,11 @@
   <!-- KPI Grid -->
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
     <div
-      class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5 hover:border-[#10b981]/30 transition-all group">
-      <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Total Empreinte</p>
+      class="p-6 rounded-[2rem] border border-white/500 hover:border-[#10b981]/30 transition-all group">
+      <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3 text-[#DBDBDB]">Total Empreinte</p>
       <div class="flex items-end gap-2">
         <h3 class="text-4xl font-black text-[#34d399]">{{ stats?.total_footprint | number }}</h3>
-        <span class="text-gray-500 text-sm font-medium mb-1.5">tCO₂e</span>
+        <span class="text-gray-500 text-sm font-medium mb-1.5 text-[#DBDBDB]">tCO₂e</span>
       </div>
       <div
         class="mt-4 flex items-center gap-2 text-[10px] text-red-400 font-bold bg-red-400/5 px-2 py-1 rounded-lg w-fit">
@@ -55,11 +55,11 @@
       </div>
     </div>
 
-    <div class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5">
-      <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Intensité Carbone</p>
+    <div class="p-6 rounded-[2rem] border border-white/500">
+      <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3 text-[#DBDBDB]">Intensité Carbone</p>
       <div class="flex items-end gap-2">
         <h3 class="text-4xl font-black text-white">{{ stats?.carbon_intensity }}</h3>
-        <span class="text-gray-500 text-sm font-medium mb-1.5">kg/m²</span>
+        <span class="text-gray-500 text-sm font-medium mb-1.5 text-[#DBDBDB]">kg/m²</span>
       </div>
       <div class="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
         <div class="h-full bg-[#10b981]" style="width: 65%"></div>
@@ -67,11 +67,11 @@
     </div>
 
     <div
-      class="bg-[#161b27]/80 p-1 rounded-[2rem] border border-white/5 flex flex-col justify-center items-center text-center">
+      class="p-1 rounded-[2rem] border border-white/500 flex flex-col justify-center items-center text-center">
       <div class="p-5">
-        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Score Global</p>
+        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3 text-[#DBDBDB]">Score Global</p>
         <h3 class="text-5xl font-black text-[#10b981]">{{ stats?.global_score }}</h3>
-        <p class="text-gray-600 text-[10px] mt-2 italic">Standard RE2020</p>
+        <p class="text-gray-600 text-[10px] mt-2 italic text-[#DBDBDB]">Standard RE2020</p>
       </div>
     </div>
 
@@ -92,7 +92,7 @@
     <!-- Trend Line Chart -->
     <div class="lg:col-span-2 bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
       <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Évolution des Émissions <span
-          class="text-gray-500 text-sm ml-2 font-medium">(tCO₂e / mois)</span></h3>
+          class="text-gray-500 text-sm ml-2 font-medium text-[#DBDBDB]">(tCO₂e / mois)</span></h3>
       <div class="h-[300px]">
         <ngx-charts-area-chart [scheme]="colorScheme" [results]="carbonTrend" [gradient]="true" [xAxis]="true"
           [yAxis]="true" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false" [autoScale]="true"

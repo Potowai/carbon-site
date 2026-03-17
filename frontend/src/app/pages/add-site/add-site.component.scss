@@ -14,7 +14,7 @@
   .mat-step-header {
     pointer-events: none !important;
     .mat-step-label {
-      color: rgba(255,255,255,0.4) !important;
+      color: #DBDBDB !important;
       font-weight: 700 !important;
       font-size: 11px !important;
       text-transform: uppercase !important;
@@ -22,7 +22,7 @@
     }
     .mat-step-icon {
       background-color: rgba(255,255,255,0.05) !important;
-      color: rgba(255,255,255,0.5) !important;
+      color: rgb(255, 255, 255) !important;
       border: 1px solid rgba(255,255,255,0.1);
     }
 
@@ -51,6 +51,9 @@
     --mdc-outlined-text-field-label-text-color: rgba(255, 255, 255, 0.4);
     --mdc-outlined-text-field-focus-label-text-color: #10b981;
     --mat-mdc-form-field-floating-label-scale: 0.85;
+    --mat-form-field-outlined-input-text-placeholder-color: #8C8C8C;
+    --mat-form-field-outlined-label-text-color: #8C8C8C;
+    --mat-form-field-outlined-hover-label-text-color: #8C8C8C;
 
     .mdc-text-field--outlined {
       background: rgba(255, 255, 255, 0.02) !important;
