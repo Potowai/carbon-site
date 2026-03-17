@@ -6,6 +6,7 @@ import { AddSiteComponent } from './pages/add-site/add-site.component';
 import { SiteListComponent } from './pages/site-list/site-list.component';
 import { AuthService } from './services/auth.service';
 import { map, take } from 'rxjs';
+import { SiteDetailComponent } from './pages/site-detail/site-detail.component';
 
 const authGuard = () => {
   const auth = inject(AuthService);
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'add-site', component: AddSiteComponent, canActivate: [authGuard] },
   { path: 'sites', component: SiteListComponent, canActivate: [authGuard] },
+  { path: 'sites/:id', component: SiteDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

@@ -53,4 +53,29 @@ router.post('/estimate', siteController.estimateCarbon);
  */
 router.get('/global-dashboard', siteController.getGlobalDashboard);
 
+/**
+ * @swagger
+ * /api/sites/me:
+ *   get:
+ *     summary: Récupérer tous les sites liés à l'utilisateur connecté
+ *     tags: [Sites]
+ *     responses:
+ *       200:
+ *         description: Liste de nos sites
+ */
+router.get('/me', authMiddleware, siteController.getMySites);
+
+/**
+ * @swagger
+ * /api/sites/id:
+ *   get:
+ *     summary: Récupérer les informations d'un site
+ *     tags: [Sites]
+ *     responses:
+ *       200:
+ *         description: Informations d'un site
+ */
+router.get('/:id', authMiddleware, siteController.getSiteById);
+
+
 module.exports = router;

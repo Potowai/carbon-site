@@ -22,6 +22,52 @@ const getAllSites = async (req, res, next) => {
   }
 };
 
+const getMySites = async (req, res, next) => {
+  try {
+    const userId = req.auth?.userId;
+ 
+    const { data: sites, error } = await supabase
+      .from('sites')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+ 
+    if (error) throw error;
+    res.json({ success: true, data: sites });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getSiteById = async (req, res, next) => {
+  try {
+    const userId = req.auth?.userId;
+    const { id } = req.params;
+ 
+    const { data: site, error } = await supabase
+      .from('sites')
+      .select(`
+        *,
+        materiaux (type_materiau, quantite_tonnes),
+        consommations (annee, energie_mwh)
+      `)
+      .eq('id', id)
+      .eq('user_id', userId)
+      .single();
+ 
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ success: false, message: 'Site not found' });
+      }
+      throw error;
+    }
+ 
+    res.json({ success: true, data: site });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createSite = async (req, res, next) => {
   try {
     const { 
@@ -124,6 +170,8 @@ const getGlobalDashboard = async (req, res, next) => {
 
 module.exports = {
   getAllSites,
+  getMySites,
+  getSiteById,
   createSite,
   estimateCarbon,
   getGlobalDashboard

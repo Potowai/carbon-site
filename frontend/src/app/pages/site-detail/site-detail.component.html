@@ -1,0 +1,170 @@
+<div class="min-h-screen bg-[#0b0f19] text-white p-6 lg:p-10 font-['Inter']">
+  <!-- Top Bar -->
+  <header
+    class="flex justify-between items-center mb-12 bg-white/[0.03] backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl">
+    <div class="flex items-center gap-4">
+      <div
+        class="w-10 h-10 bg-[#10b981] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+        <span class="font-black text-black text-xl">C</span>
+      </div>
+      <h1 class="text-xl font-black tracking-tight flex items-center gap-2">
+        DASHBOARD <span
+          class="bg-[#10b981]/10 text-[#10b981] text-[10px] px-2 py-0.5 rounded-full border border-[#10b981]/20">ALPHA</span>
+      </h1>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <a routerLink="/add-site"
+        class="bg-[#10b981] hover:bg-[#059669] text-black font-black py-2.5 px-6 rounded-xl transition-all shadow-lg text-xs uppercase tracking-widest">
+        + Nouveau Site
+      </a>
+
+      <div
+        class="flex items-center gap-3 bg-black/40 p-1.5 pr-4 rounded-full border border-white/10 group animate-fade-in"
+        *ngIf="user$ | async as user">
+        <div
+          class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#10b981] to-[#34d399] flex items-center justify-center text-black font-black text-xs">
+          {{ user.email?.charAt(0).toUpperCase() }}
+        </div>
+        <span class="text-xs font-semibold text-gray-300 hidden sm:inline">{{ user.email }}</span>
+        <button (click)="logout()" class="text-gray-500 hover:text-red-400 transition-colors ml-2" title="Déconnexion">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-black tracking-tight mt-2">
+        {{ site?.nom || 'Détail du site' }}
+      </h1>
+      <div class="text-gray-400 text-xs mt-1" *ngIf="site?.surface_m2">
+        Surface: {{ site.surface_m2 }} m²
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-gray-400">Chargement...</div>
+  <div *ngIf="!loading && error" class="text-red-400 font-bold">{{ error }}</div>
+
+  <ng-container *ngIf="!loading && !error">
+    <!-- KPI -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5">
+        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Empreinte totale</p>
+        <div class="flex items-end gap-2" *ngIf="hasEmissions; else missingTotal">
+          <h3 class="text-4xl font-black text-[#34d399]">{{ (totalCo2Kg! / 1000) | number:'1.0-1' }}</h3>
+          <span class="text-gray-500 text-sm font-medium mb-1.5">tCO₂e</span>
+        </div>
+        <ng-template #missingTotal>
+          <div class="text-gray-400 text-sm">Données insuffisantes</div>
+        </ng-template>
+      </div>
+
+      <div class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5">
+        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">CO₂ / m²</p>
+        <div *ngIf="co2ParM2 != null; else missingM2" class="flex items-end gap-2">
+          <h3 class="text-4xl font-black text-white">{{ co2ParM2 | number:'1.0-1' }}</h3>
+          <span class="text-gray-500 text-sm font-medium mb-1.5">kg/m²</span>
+        </div>
+        <ng-template #missingM2>
+          <div class="text-gray-400 text-sm">Surface manquante</div>
+        </ng-template>
+      </div>
+
+      <div class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5">
+        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">CO₂ / employé</p>
+        <div *ngIf="co2ParEmploye != null; else missingEmp" class="flex items-end gap-2">
+          <h3 class="text-4xl font-black text-white">{{ co2ParEmploye | number:'1.0-1' }}</h3>
+          <span class="text-gray-500 text-sm font-medium mb-1.5">kg</span>
+        </div>
+        <ng-template #missingEmp>
+          <div class="text-gray-400 text-sm">Nb employés manquant</div>
+        </ng-template>
+      </div>
+
+      <div class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5">
+        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Données</p>
+        <div class="text-gray-300 text-sm">
+          <div>Matériaux: <span class="font-black">{{ hasMaterials ? 'OK' : '—' }}</span></div>
+          <div class="mt-1">Énergie: <span class="font-black">{{ hasEnergy ? 'OK' : '—' }}</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphs -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Répartition matériaux -->
+      <div class="bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
+        <h3 class="text-lg font-black mb-6 tracking-tight uppercase">Matériaux (tonnes)</h3>
+
+        <div *ngIf="hasMaterials; else noMaterials" class="h-[320px] flex items-center justify-center">
+          <ngx-charts-pie-chart
+            [scheme]="colorScheme"
+            [results]="materialChart"
+            [gradient]="false"
+            [legend]="true"
+            [legendPosition]="LegendPosition.Below"
+            [legendTitle]="''"
+            [labels]="false"
+            [doughnut]="true"
+            [animations]="true">
+          </ngx-charts-pie-chart>
+        </div>
+
+        <ng-template #noMaterials>
+          <div class="text-gray-400 text-sm">Aucun matériau renseigné.</div>
+        </ng-template>
+      </div>
+
+      <!-- Conso énergie -->
+      <div class="lg:col-span-2 bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
+        <h3 class="text-lg font-black mb-6 tracking-tight uppercase">Consommation énergie (MWh)</h3>
+
+        <div *ngIf="hasEnergy; else noEnergy" class="h-[320px]">
+          <ngx-charts-bar-vertical
+            [scheme]="colorScheme"
+            [results]="energyChart"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="false"
+            [showXAxisLabel]="false"
+            [showYAxisLabel]="false"
+            [animations]="true">
+          </ngx-charts-bar-vertical>
+        </div>
+
+        <ng-template #noEnergy>
+          <div class="text-gray-400 text-sm">Aucune consommation renseignée.</div>
+        </ng-template>
+      </div>
+    </section>
+
+    <!-- Construction vs exploitation -->
+    <section class="bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 mt-8">
+      <h3 class="text-lg font-black mb-6 tracking-tight uppercase">Répartition des émissions (tCO₂e)</h3>
+
+      <div *ngIf="emissionSplitChart.length > 0; else noSplit" class="h-[320px]">
+        <ngx-charts-bar-horizontal
+          [scheme]="colorScheme"
+          [results]="emissionSplitChart"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="false"
+          [showXAxisLabel]="false"
+          [showYAxisLabel]="false"
+          [animations]="true">
+        </ngx-charts-bar-horizontal>
+      </div>
+
+      <ng-template #noSplit>
+        <div class="text-gray-400 text-sm">Données insuffisantes pour calculer la répartition.</div>
+      </ng-template>
+    </section>
+  </ng-container>
+</div>

@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SiteService } from '../../services/site.service';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-site',
@@ -34,8 +33,7 @@ export class AddSiteComponent {
     private _formBuilder: FormBuilder, 
     private router: Router,
     private snackBar: MatSnackBar,
-    private siteService: SiteService,
-    private auth: AuthService
+    private siteService: SiteService
   ) {
     this.generalFormGroup = this._formBuilder.group({
       nom: ['', Validators.required],
@@ -63,25 +61,20 @@ export class AddSiteComponent {
     };
 
     try {
-      const session = await this.auth.getSession();
-      const headers = {
-        'Authorization': `Bearer ${session?.access_token}`
-      };
-
-      this.siteService.createSite(payload, headers).subscribe({
-        next: (site) => {
-          this.snackBar.open("Site ajouté avec succès !", "OK", {
+      this.siteService.createSite(payload).subscribe({
+        next: (response) => {
+          this.snackBar.open("Site créé avec succès!", "Fermer", {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/sites']);
         },
-        error: (err) => {
-          this.snackBar.open("Erreur lors de l'ajout du site.", "Réessayer", {
+        error: (error) => {
+          this.snackBar.open("Erreur lors de la création du site", "Réessayer", {
             duration: 5000,
             panelClass: ['error-snackbar']
           });
-          console.error(err);
+          console.error("Erreur API:", error);
         }
       });
     } catch (err) {

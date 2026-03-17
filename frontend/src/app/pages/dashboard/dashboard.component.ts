@@ -11,8 +11,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, RouterLink, NgxChartsModule, MatSnackBarModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
   user$: Observable<any>;
@@ -23,6 +22,8 @@ export class DashboardComponent implements OnInit {
   // Data for ngx-charts
   carbonTrend: any[] = [];
   materialDistribution: any[] = [];
+  sites: any[] = [];
+  loadingSites = true;
 
   colorScheme: any = {
     domain: ['#10b981', '#3b82f6', '#06b6d4', '#64748b']
@@ -39,6 +40,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadDashboardData();
+    this.siteService.getMySites().subscribe({
+      next: (sites) => { 
+        this.sites = sites; 
+        this.loadingSites = false; 
+      },
+      error: () => { this.loadingSites = false; }
+    });
   }
 
   loadDashboardData() {

@@ -22,10 +22,23 @@ export class SiteService {
       map(response => response.data)
     );
   }
+  
+  getMySites(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/me`).pipe(
+      map(response => response.data)
+    );
+  }
 
-  createSite(siteData: any, headers: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, siteData, { headers }).pipe(
+  getSiteById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(response => response.data)
+    );
+  }
+
+  createSite(siteData: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, siteData).pipe(
       map(response => response.data)
     );
   }
 }
+
