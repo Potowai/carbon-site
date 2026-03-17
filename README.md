@@ -30,6 +30,30 @@ CarbonSite est une **Progressive Web App (PWA)** mobile-first conçue pour estim
 - Node.js 20+
 - Un compte [Supabase](https://supabase.com)
 
+### Option Docker (Frontend + Backend)
+
+Depuis la racine du repo :
+
+```bash
+docker compose up --build
+```
+
+Applications disponibles :
+
+- Frontend: `http://localhost:4200`
+- Backend API: `http://localhost:3000`
+- Swagger: `http://localhost:3000/api-docs`
+
+Notes :
+
+- Vous pouvez definir des variables Docker partagees dans `.env.docker` (copiez `.env.docker.example`).
+- Le backend charge aussi ses variables via `backend/.env`.
+- Pour arrêter les conteneurs :
+
+```bash
+docker compose down
+```
+
 ### 2. Configuration du Backend
 ```bash
 cd backend

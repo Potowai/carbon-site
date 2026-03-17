@@ -5,6 +5,7 @@ yarn-error.log
 
 # Environment
 .env
+.env.docker
 backend/.env
 
 # Build outputs

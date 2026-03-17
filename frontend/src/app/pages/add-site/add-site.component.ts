@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +18,7 @@ import { LucideAngularModule, Building2, LayoutDashboard, ChevronLeft } from 'lu
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatStepperModule,
     MatInputModule,
     MatButtonModule,
@@ -25,6 +27,7 @@ import { LucideAngularModule, Building2, LayoutDashboard, ChevronLeft } from 'lu
     LucideAngularModule
   ],
   templateUrl: './add-site.component.html',
+  styleUrl: './add-site.component.scss',
 })
 export class AddSiteComponent {
   generalFormGroup: FormGroup;
@@ -74,8 +77,18 @@ export class AddSiteComponent {
 
     try {
       const session = await this.auth.getSession();
+      
+      if (!session || !session.access_token) {
+        this.isSubmitting = false;
+        this.snackBar.open("Session expirée ou non trouvée. Veuillez vous reconnecter.", "OK", {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+        return;
+      }
+
       const headers = {
-        'Authorization': `Bearer ${session?.access_token}`
+        'Authorization': `Bearer ${session.access_token}`
       };
 
       this.siteService.createSite(payload, headers).subscribe({
@@ -90,21 +103,24 @@ export class AddSiteComponent {
             panelClass: ['success-snackbar']
           });
           
-          // Re-estimate on backend happens correctly now.
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           this.isSubmitting = false;
-          this.snackBar.open("Erreur lors de l'ajout du site.", "Réessayer", {
+          const errorMsg =
+            err?.status === 401
+              ? "Non autorisé (session expirée). Veuillez vous reconnecter puis réessayer."
+              : (err.error?.message || "Erreur lors de l'ajout du site.");
+          this.snackBar.open(errorMsg, "Réessayer", {
             duration: 5000,
             panelClass: ['error-snackbar']
           });
-          console.error(err);
+          console.error('Create Site Error:', err);
         }
       });
     } catch (err) {
       this.isSubmitting = false;
-      console.error(err);
+      console.error('Session retrieval error:', err);
     }
   }
 }

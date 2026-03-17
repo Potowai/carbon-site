@@ -1,0 +1,90 @@
+<div class="min-h-screen app-bg p-6 lg:p-10 font-['Inter']">
+  <header class="flex flex-col lg:flex-row justify-between items-center mb-8 lg:mb-12 app-panel p-4 lg:p-6 rounded-3xl shadow-2xl gap-6 lg:gap-0">
+    <div class="flex items-center gap-4 w-full lg:w-auto">
+      <a routerLink="/sites" class="w-10 h-10 btn-ghost rounded-xl flex items-center justify-center" aria-label="Retour à la liste">
+        <lucide-icon name="chevron-left" class="w-5 h-5"></lucide-icon>
+      </a>
+      <div>
+        <h1 class="text-lg lg:text-xl font-black tracking-tight uppercase">Détails du site</h1>
+        <p class="text-muted text-[10px] lg:text-xs font-medium uppercase tracking-widest mt-0.5 lg:mt-1">Fiche chantier</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a routerLink="/add-site" class="bg-accent px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all text-center">
+        + Nouveau
+      </a>
+    </div>
+  </header>
+
+  <section *ngIf="loading" class="flex flex-col items-center justify-center py-24 app-card-soft rounded-[3rem]">
+    <div class="w-14 h-14 border-4 rounded-full animate-spin" style="border-color: color-mix(in srgb, var(--app-accent) 20%, transparent); border-top-color: var(--app-accent)"></div>
+    <p class="mt-5 text-xs font-black uppercase tracking-widest text-muted">Chargement du site...</p>
+  </section>
+
+  <section *ngIf="!loading && errorMessage" class="app-card-soft rounded-3xl p-8 text-center">
+    <p class="text-sm text-red-400 font-bold mb-4">{{ errorMessage }}</p>
+    <a routerLink="/sites" class="btn-outline inline-flex px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest">Retour liste</a>
+  </section>
+
+  <section *ngIf="!loading && site" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 app-card rounded-[2.5rem] p-8">
+      <div class="flex items-start justify-between gap-6 mb-8">
+        <div>
+          <p class="text-muted text-[10px] uppercase tracking-widest font-black mb-2">Nom</p>
+          <h2 class="text-3xl font-black uppercase tracking-tight">{{ site.nom }}</h2>
+          <p class="text-muted text-xs mt-2" *ngIf="site.created_at">Créé le {{ site.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <div class="px-3 py-1 btn-ghost rounded-full text-[10px] font-bold text-muted uppercase tracking-widest">
+          ID: {{ site.id }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div class="app-panel p-5 rounded-2xl">
+          <p class="text-muted text-[10px] uppercase tracking-widest font-black mb-1">Surface</p>
+          <p class="text-2xl font-black">{{ (site.surface_m2 || 0) | number:'1.0-0' }} <span class="text-sm text-muted">m²</span></p>
+        </div>
+        <div class="app-panel p-5 rounded-2xl">
+          <p class="text-muted text-[10px] uppercase tracking-widest font-black mb-1">Employés</p>
+          <p class="text-2xl font-black">{{ site.nb_employes || 0 }}</p>
+        </div>
+        <div class="app-panel p-5 rounded-2xl">
+          <p class="text-muted text-[10px] uppercase tracking-widest font-black mb-1">Parking sous-sol</p>
+          <p class="text-2xl font-black">{{ site.parking_sous_sol || 0 }}</p>
+        </div>
+        <div class="app-panel p-5 rounded-2xl">
+          <p class="text-muted text-[10px] uppercase tracking-widest font-black mb-1">Parking sous-dalle</p>
+          <p class="text-2xl font-black">{{ site.parking_sous_dalle || 0 }}</p>
+        </div>
+        <div class="app-panel p-5 rounded-2xl md:col-span-2">
+          <p class="text-muted text-[10px] uppercase tracking-widest font-black mb-1">Parking aérien</p>
+          <p class="text-2xl font-black">{{ site.parking_aerien || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="app-card rounded-[2.5rem] p-8">
+      <h3 class="text-xs font-black uppercase tracking-widest text-muted mb-4">Empreinte</h3>
+      <div class="badge-accent rounded-3xl p-6">
+        <p class="text-[10px] font-black uppercase tracking-widest mb-2" style="color: var(--app-accent)">Impact carbone estimé</p>
+        <div class="flex items-end gap-2">
+          <span class="text-5xl font-black leading-none">{{ (site.total_carbon_tons || 0) | number:'1.0-2' }}</span>
+          <span class="text-sm font-bold text-muted mb-1.5">tCO₂e</span>
+        </div>
+      </div>
+
+      <div class="mt-8 space-y-3">
+        <a routerLink="/sites" class="w-full btn-outline py-4 rounded-2xl transition-all flex items-center justify-center gap-2">
+          <lucide-icon name="layout-dashboard" class="w-4 h-4"></lucide-icon>
+          <span class="text-xs font-black uppercase tracking-widest">Retour liste</span>
+        </a>
+        <a routerLink="/dashboard" class="w-full btn-outline py-4 rounded-2xl transition-all flex items-center justify-center gap-2">
+          <lucide-icon name="layout-dashboard" class="w-4 h-4"></lucide-icon>
+          <span class="text-xs font-black uppercase tracking-widest">Dashboard</span>
+        </a>
+      </div>
+    </aside>
+  </section>
+</div>
+

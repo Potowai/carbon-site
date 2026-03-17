@@ -1,8 +1,8 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent),
-              radial-gradient(circle at bottom left, rgba(52, 211, 153, 0.05), transparent);
+  background: radial-gradient(circle at top right, color-mix(in srgb, var(--app-accent) 6%, transparent), transparent),
+              radial-gradient(circle at bottom left, color-mix(in srgb, var(--app-accent) 4%, transparent), transparent);
 }
 
 ::ng-deep {
@@ -14,31 +14,31 @@
   .mat-step-header {
     pointer-events: none !important;
     .mat-step-label {
-      color: rgba(255,255,255,0.4) !important;
+      color: var(--app-muted) !important;
       font-weight: 700 !important;
       font-size: 11px !important;
       text-transform: uppercase !important;
       letter-spacing: 0.1em !important;
     }
     .mat-step-icon {
-      background-color: rgba(255,255,255,0.05) !important;
-      color: rgba(255,255,255,0.5) !important;
-      border: 1px solid rgba(255,255,255,0.1);
+      background-color: color-mix(in srgb, var(--app-text) 6%, transparent) !important;
+      color: color-mix(in srgb, var(--app-text) 60%, transparent) !important;
+      border: 1px solid var(--app-border) !important;
     }
 
     &.mat-step-header-active {
-       .mat-step-label { color: #10b981 !important; }
+       .mat-step-label { color: var(--app-accent) !important; }
        .mat-step-icon { 
-         background-color: #10b981 !important; 
-         color: #0b0f19 !important;
-         box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+         background-color: var(--app-accent) !important; 
+         color: var(--app-on-accent) !important;
+         box-shadow: 0 0 15px color-mix(in srgb, var(--app-accent) 45%, transparent);
        }
     }
 
     &.mat-step-header-completed {
        .mat-step-icon { 
-         background-color: rgba(16, 185, 129, 0.2) !important;
-         color: #10b981 !important;
+         background-color: color-mix(in srgb, var(--app-accent) 20%, transparent) !important;
+         color: var(--app-accent) !important;
        }
     }
   }
@@ -46,14 +46,14 @@
   /* Form Field Customization */
   .mat-mdc-form-field {
     --mdc-outlined-text-field-container-shape: 12px;
-    --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.1);
-    --mdc-outlined-text-field-focus-outline-color: #10b981;
-    --mdc-outlined-text-field-label-text-color: rgba(255, 255, 255, 0.4);
-    --mdc-outlined-text-field-focus-label-text-color: #10b981;
+    --mdc-outlined-text-field-outline-color: var(--app-border);
+    --mdc-outlined-text-field-focus-outline-color: var(--app-accent);
+    --mdc-outlined-text-field-label-text-color: var(--app-muted);
+    --mdc-outlined-text-field-focus-label-text-color: var(--app-accent);
     --mat-mdc-form-field-floating-label-scale: 0.85;
 
     .mdc-text-field--outlined {
-      background: rgba(255, 255, 255, 0.02) !important;
+      background: color-mix(in srgb, var(--app-text) 4%, transparent) !important;
     }
 
     .mat-mdc-text-field-wrapper {
@@ -62,7 +62,7 @@
     }
 
     input {
-      color: white !important;
+      color: var(--app-text) !important;
       font-weight: 500;
     }
   }
@@ -73,21 +73,22 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: var(--app-muted) !important;
   }
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--app-panel);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--app-border);
+  box-shadow: 0 25px 50px -12px var(--app-elev);
 }
 
 .premium-btn {
   @apply transition-all duration-300 transform active:scale-95;
   &.primary {
     background: linear-gradient(135deg, #10b981, #34d399);
-    color: #0b0f19;
+    color: var(--app-on-accent);
     box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3);
     &:hover {
       box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.4);

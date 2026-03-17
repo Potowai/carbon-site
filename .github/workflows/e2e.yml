@@ -1,0 +1,102 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/e2e.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/e2e.yml'
+  workflow_dispatch:
+
+jobs:
+  playwright:
+    name: Playwright Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        shardIndex: [1, 2]
+        shardTotal: [2]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci --legacy-peer-deps
+          npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Start development server
+        run: |
+          cd frontend
+          npm start &
+          npx wait-on http://localhost:4200 --timeout 30000
+
+      - name: Run Playwright tests
+        run: |
+          cd frontend
+          npx playwright test --project=${{ matrix.browser }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        env:
+          CI: true
+          TEST_USER_TOKEN: ${{ secrets.TEST_USER_TOKEN }}
+          BASE_URL: http://localhost:4200
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}-${{ matrix.shardIndex }}
+          path: frontend/playwright-report/
+          retention-days: 30
+
+      - name: Upload test videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-videos-${{ matrix.browser }}-${{ matrix.shardIndex }}
+          path: frontend/test-results/
+          retention-days: 7
+
+  test-report:
+    name: Publish Test Report
+    runs-on: ubuntu-latest
+    if: always()
+    needs: playwright
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Merge test reports
+        run: |
+          mkdir -p merged-report
+          # Merge reports if using multiple reporters
+          echo "Reports downloaded successfully"
+
+      - name: Publish report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Playwright Test Report
+          path: 'artifacts/**/junit.xml'
+          reporter: 'java-junit'
+          fail-on-error: false

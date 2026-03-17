@@ -49,7 +49,30 @@ export class AuthService {
 
   // Helper for RLS headers if needed for REST API
   async getSession() {
-    const { data } = await this.supabase.auth.getSession();
-    return data.session;
+    const { data, error } = await this.supabase.auth.getSession();
+    if (error) {
+      throw error;
+    }
+
+    const session = data.session;
+    if (!session) {
+      return null;
+    }
+
+    // Refresh token if expired (or about to expire soon)
+    const expiresAtMs = (session.expires_at || 0) * 1000;
+    const nowMs = Date.now();
+    const skewMs = 60_000; // 60s safety window
+
+    if (expiresAtMs > 0 && expiresAtMs - nowMs <= skewMs) {
+      const refreshed = await this.supabase.auth.refreshSession();
+      if (refreshed.error) {
+        // If refresh fails, fall back to current session (may 401) and let UI handle re-login.
+        return session;
+      }
+      return refreshed.data.session;
+    }
+
+    return session;
   }
 }

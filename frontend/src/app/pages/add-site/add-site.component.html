@@ -1,25 +1,25 @@
-<div class="min-h-screen bg-carbon-bg text-white p-6 lg:p-10 font-['Inter']">
+<div class="min-h-screen app-bg p-6 lg:p-10 font-['Inter']">
   <!-- Top Bar -->
-  <header class="flex flex-col sm:flex-row justify-between items-center mb-8 lg:mb-12 bg-white/[0.03] backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl max-w-5xl mx-auto gap-6 sm:gap-0">
+  <header class="flex flex-col sm:flex-row justify-between items-center mb-8 lg:mb-12 app-panel p-4 rounded-3xl shadow-2xl max-w-5xl mx-auto gap-6 sm:gap-0">
     <div class="flex items-center gap-4 w-full sm:w-auto">
-      <button routerLink="/dashboard" class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all group border border-white/10" aria-label="Retour au Dashboard">
-        <svg class="w-5 h-5 text-gray-400 group-hover:text-[#10b981] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <button routerLink="/dashboard" class="w-10 h-10 btn-ghost rounded-xl flex items-center justify-center transition-all group" aria-label="Retour au Dashboard">
+        <svg class="w-5 h-5 text-muted group-hover:text-[var(--app-accent)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
       </button>
       <h1 class="text-lg lg:text-xl font-black tracking-tight uppercase">
-        Nouveau <span class="text-[#10b981]">Chantier</span>
+        Nouveau <span class="text-[var(--app-accent)]">Chantier</span>
       </h1>
     </div>
 
-    <div class="flex items-center gap-3 bg-black/40 px-4 py-2 rounded-full border border-white/10">
-      <div class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" aria-hidden="true"></div>
-      <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Calculateur RE2020</span>
+    <div class="flex items-center gap-3 app-panel px-4 py-2 rounded-full">
+      <div class="w-2 h-2 rounded-full bg-[var(--app-accent)] animate-pulse" aria-hidden="true"></div>
+      <span class="text-[10px] font-black uppercase tracking-widest text-muted">Calculateur RE2020</span>
     </div>
 
     <!-- Burger Toggle (Mobile Only) -->
     <div class="sm:hidden absolute top-4 right-4">
-      <button (click)="toggleMenu()" class="p-2 text-white bg-white/5 rounded-xl border border-white/10" [aria-label]="isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'" [aria-expanded]="isMenuOpen">
+      <button (click)="toggleMenu()" class="p-2 btn-ghost rounded-xl" [aria-label]="isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'" [aria-expanded]="isMenuOpen">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
           <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -29,12 +29,12 @@
 
     <!-- Mobile Menu Overlay -->
     <div class="w-full sm:hidden flex-col gap-4 animate-slide-down" [class.flex]="isMenuOpen" [class.hidden]="!isMenuOpen">
-      <div class="flex flex-col gap-3 p-4 bg-white/[0.02] rounded-2xl border border-white/5 mt-4">
-        <a routerLink="/dashboard" (click)="isMenuOpen = false" class="w-full bg-white/5 py-4 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
+      <div class="flex flex-col gap-3 p-4 app-panel rounded-2xl mt-4">
+        <a routerLink="/dashboard" (click)="isMenuOpen = false" class="w-full btn-outline py-4 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
           Dashboard
         </a>
-        <a routerLink="/sites" (click)="isMenuOpen = false" class="w-full bg-white/5 py-4 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
+        <a routerLink="/sites" (click)="isMenuOpen = false" class="w-full btn-outline py-4 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
           Liste des Sites
         </a>
@@ -55,7 +55,7 @@
           <form [formGroup]="generalFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
               <h2 class="text-2xl font-black tracking-tight">Identité du projet</h2>
-              <p class="text-gray-500 text-sm">Définissez les bases de votre évaluation carbone.</p>
+              <p class="text-muted text-sm">Définissez les bases de votre évaluation carbone.</p>
             </div>
 
             <div class="grid grid-cols-1 gap-6">
@@ -92,7 +92,7 @@
           <form [formGroup]="infraFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
               <h2 class="text-2xl font-black tracking-tight">Ouvrages & Parkings</h2>
-              <p class="text-gray-500 text-sm">Les infrastructures souterraines sont les plus impactantes.</p>
+              <p class="text-muted text-sm">Les infrastructures souterraines sont les plus impactantes.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -115,7 +115,7 @@
             </div>
 
             <div class="flex justify-between items-center pt-4">
-              <button matStepperPrevious class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
+              <button matStepperPrevious class="text-muted hover:opacity-100 font-black uppercase text-xs tracking-widest transition-colors">
                 Retour
               </button>
               <button matStepperNext class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
@@ -132,7 +132,7 @@
           <form [formGroup]="energyFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
               <h2 class="text-2xl font-black tracking-tight">Performance Énergétique</h2>
-              <p class="text-gray-500 text-sm">Consommations prévisionnelles annuelles.</p>
+              <p class="text-muted text-sm">Consommations prévisionnelles annuelles.</p>
             </div>
 
             <div class="grid grid-cols-1 gap-6">
@@ -149,13 +149,13 @@
                 </div>
                 <div>
                   <h4 class="font-black text-[#10b981] uppercase text-xs tracking-widest mb-1">Algorithme d'IA actif</h4>
-                  <p class="text-gray-300 text-sm leading-relaxed">Notre modèle CarbonCompute™ estimera automatiquement le tonnage des matériaux (béton, acier, verre) en fonction de vos saisies.</p>
+                  <p class="text-muted-2 text-sm leading-relaxed">Notre modèle CarbonCompute™ estimera automatiquement le tonnage des matériaux (béton, acier, verre) en fonction de vos saisies.</p>
                 </div>
               </div>
             </div>
 
             <div class="flex justify-between items-center pt-6">
-              <button matStepperPrevious class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
+              <button matStepperPrevious class="text-muted hover:opacity-100 font-black uppercase text-xs tracking-widest transition-colors">
                 Retour
               </button>
               <button (click)="submit()" class="premium-btn primary px-12 py-5 rounded-2xl font-black uppercase text-sm tracking-[0.2em] shadow-glow">

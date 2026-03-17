@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
+const supabase = require('../config/supabase');
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   
   if (!authHeader) {
@@ -10,13 +10,22 @@ const authMiddleware = (req, res, next) => {
   const token = authHeader.split(' ')[1];
   
   try {
-    const decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET);
+    const { data: { user }, error } = await supabase.auth.getUser(token);
     
-    // Supabase JWTs contain the user ID in the 'sub' field
-    req.auth = { userId: decoded.sub, email: decoded.email };
+    if (error || !user) {
+      console.error('Supabase Auth Error:', error?.message);
+      return res.status(401).json({ 
+        message: 'Unauthorized: Invalid token', 
+        error: error?.message 
+      });
+    }
+
+    // Pass user info to the next middleware
+    req.auth = { userId: user.id, email: user.email };
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Unauthorized: Invalid token' });
+    console.error('Unexpected Auth Middleware Error:', err.message);
+    res.status(500).json({ message: 'Internal Server Error during authentication' });
   }
 };
 

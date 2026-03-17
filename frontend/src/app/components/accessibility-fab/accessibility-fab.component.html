@@ -1,0 +1,102 @@
+<div class="a11y-fab-container">
+  <button
+    type="button"
+    class="a11y-fab"
+    (click)="toggleOpen()"
+    [attr.aria-label]="open ? 'Fermer le menu accessibilité' : 'Ouvrir le menu accessibilité'"
+    [attr.aria-expanded]="open"
+    aria-haspopup="dialog"
+  >
+    <span class="a11y-fab-icon" aria-hidden="true">
+      <svg class="a11y-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4a2 2 0 1 0 0.001 4.001A2 2 0 0 0 12 4Z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 9h12" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l2 11" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16 9l-2 11" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 13h3" />
+      </svg>
+    </span>
+  </button>
+
+  <div *ngIf="open" class="a11y-popover" role="dialog" aria-label="Options d’accessibilité">
+    <div class="a11y-popover-header">
+      <div>
+        <div class="a11y-title">Accessibilité</div>
+        <div class="a11y-subtitle">Modes combinables, persistés sur l’appareil.</div>
+      </div>
+      <button type="button" class="a11y-close" (click)="close()" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="a11y-options" *ngIf="state$ | async as s">
+      <div class="a11y-row">
+        <div class="a11y-row-text">
+          <div class="a11y-option-title">Thème</div>
+          <div class="a11y-option-desc">Forcer clair/sombre sur cette app.</div>
+        </div>
+        <div class="a11y-segmented" role="group" aria-label="Sélection du thème">
+          <button
+            type="button"
+            class="a11y-seg"
+            [class.is-active]="s.theme === 'dark'"
+            (click)="a11y.setState({ ...s, theme: 'dark' })"
+            aria-label="Thème sombre"
+            title="Thème sombre"
+          >
+            <svg class="a11y-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A8.5 8.5 0 0 1 11.2 3a7 7 0 1 0 9.8 9.8Z" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="a11y-seg"
+            [class.is-active]="s.theme === 'light'"
+            (click)="a11y.setState({ ...s, theme: 'light' })"
+            aria-label="Thème clair"
+            title="Thème clair"
+          >
+            <svg class="a11y-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 20v2" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.93 4.93l1.41 1.41" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.66 17.66l1.41 1.41" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2 12h2" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 12h2" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.93 19.07l1.41-1.41" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.66 6.34l1.41-1.41" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <label class="a11y-option">
+        <input type="checkbox" [checked]="s.largeText" (change)="a11y.toggle('largeText')" />
+        <span>
+          <span class="a11y-option-title">Texte plus grand</span>
+          <span class="a11y-option-desc">Augmente la taille globale des polices.</span>
+        </span>
+      </label>
+
+      <label class="a11y-option">
+        <input type="checkbox" [checked]="s.highContrast" (change)="a11y.toggle('highContrast')" />
+        <span>
+          <span class="a11y-option-title">Contraste renforcé</span>
+          <span class="a11y-option-desc">Renforce boutons, cartes, champs et focus.</span>
+        </span>
+      </label>
+
+      <label class="a11y-option">
+        <input type="checkbox" [checked]="s.daltonism" (change)="a11y.toggle('daltonism')" />
+        <span>
+          <span class="a11y-option-title">Daltonisme</span>
+          <span class="a11y-option-desc">Réduit la dépendance aux couleurs (repères, contours).</span>
+        </span>
+      </label>
+
+      <div class="a11y-actions">
+        <button type="button" class="a11y-reset" (click)="a11y.reset(); close()">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+</div>
+

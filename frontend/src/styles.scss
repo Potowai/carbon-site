@@ -19,22 +19,218 @@ html {
   );
 }
 
+/* =====================================
+   Theme tokens (dark default)
+   Applied via CSS variables, overridden
+   ===================================== */
+:root {
+  --app-bg: #0b0f19;
+  --app-text: #f8fafc;
+  --app-muted: #94a3b8;
+  --app-muted-2: rgba(148, 163, 184, 0.75);
+  --app-border: rgba(255, 255, 255, 0.08);
+  --app-panel: rgba(255, 255, 255, 0.03);
+  --app-card: rgba(22, 27, 39, 0.80);
+  --app-card-2: rgba(22, 27, 39, 0.40);
+  --app-elev: rgba(0, 0, 0, 0.55);
+
+  --app-accent: #10b981;
+  --app-accent-strong: #059669;
+  --app-on-accent: #0b0f19;
+  --app-danger: #ef4444;
+}
+
+html.theme-light {
+  --app-bg: #f8fafc;
+  --app-text: #0b1220;
+  --app-muted: rgba(15, 23, 42, 0.70);
+  --app-muted-2: rgba(15, 23, 42, 0.58);
+  --app-border: rgba(2, 6, 23, 0.12);
+  --app-panel: rgba(2, 6, 23, 0.04);
+  --app-card: rgba(2, 6, 23, 0.04);
+  --app-card-2: rgba(2, 6, 23, 0.03);
+  --app-elev: rgba(2, 6, 23, 0.16);
+
+  --app-on-accent: #062014;
+}
+
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
   height: 100%;
+  font: var(--mat-sys-body-medium);
+  font-family: 'Inter', sans-serif;
+  background-color: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* Semantic helpers to avoid hardcoded colors in templates */
+.app-bg {
+  background-color: var(--app-bg) !important;
+  color: var(--app-text) !important;
+}
+
+.app-panel {
+  background: var(--app-panel) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--app-border) !important;
+}
+
+.app-card {
+  background: var(--app-card) !important;
+  border: 1px solid var(--app-border) !important;
+}
+
+.app-card-soft {
+  background: var(--app-card-2) !important;
+  border: 1px dashed var(--app-border) !important;
+}
+
+.text-muted {
+  color: var(--app-muted) !important;
+}
+
+.text-muted-2 {
+  color: var(--app-muted-2) !important;
+}
+
+.border-app {
+  border-color: var(--app-border) !important;
+}
+
+.bg-accent {
+  background-color: var(--app-accent) !important;
+  color: var(--app-on-accent) !important;
+}
+
+.bg-accent:hover {
+  background-color: var(--app-accent-strong) !important;
+}
+
+.badge-accent {
+  background: color-mix(in srgb, var(--app-accent) 12%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--app-accent) 22%, transparent) !important;
+  color: var(--app-accent) !important;
+}
+
+.btn-ghost {
+  background: color-mix(in srgb, var(--app-text) 6%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--app-text) 14%, transparent) !important;
+  color: var(--app-text) !important;
+}
+
+.btn-ghost:hover {
+  background: color-mix(in srgb, var(--app-text) 10%, transparent) !important;
+}
+
+.btn-outline {
+  background: transparent !important;
+  border: 1px solid color-mix(in srgb, var(--app-text) 18%, transparent) !important;
+  color: var(--app-text) !important;
+}
+
+.btn-outline:hover {
+  border-color: color-mix(in srgb, var(--app-accent) 40%, transparent) !important;
+  background: color-mix(in srgb, var(--app-accent) 12%, transparent) !important;
+}
+
+.app-divider {
+  background: color-mix(in srgb, var(--app-text) 10%, transparent) !important;
+}
+
+.app-input {
+  width: 100%;
+  background: color-mix(in srgb, var(--app-bg) 82%, transparent);
+  border: 1px solid var(--app-border);
+  color: var(--app-text);
+  outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.app-input::placeholder {
+  color: color-mix(in srgb, var(--app-muted) 70%, transparent);
+}
+
+.app-input:focus {
+  border-color: color-mix(in srgb, var(--app-accent) 70%, transparent);
+  background: color-mix(in srgb, var(--app-bg) 92%, transparent);
+}
+
+/* =========================
+   Global Accessibility Modes
+   Applied via <html> classes
+   ========================= */
+
+html.a11y-large-text {
+  font-size: 112.5%; /* ~18px base */
+}
+
+html.a11y-high-contrast body {
+  color: var(--app-text) !important;
+}
+
+html.a11y-high-contrast .app-panel,
+html.a11y-high-contrast .app-card,
+html.a11y-high-contrast .glass-panel,
+html.a11y-high-contrast .glass-card {
+  border-color: color-mix(in srgb, var(--app-text) 32%, transparent) !important;
+}
+
+html.a11y-high-contrast .glass-panel,
+html.a11y-high-contrast .glass-card {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+html.a11y-high-contrast .mat-mdc-form-field,
+html.a11y-high-contrast .mdc-text-field--outlined {
+  --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.40) !important;
+  --mdc-outlined-text-field-focus-outline-color: #ffffff !important;
+  --mdc-outlined-text-field-label-text-color: rgba(255, 255, 255, 0.70) !important;
+  --mdc-outlined-text-field-focus-label-text-color: #ffffff !important;
+}
+
+html.a11y-high-contrast *:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 3px !important;
+}
+
+html.a11y-high-contrast button,
+html.a11y-high-contrast a,
+html.a11y-high-contrast [role='button'] {
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+html.a11y-high-contrast button {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.22) inset !important;
+}
+
+html.a11y-high-contrast button:hover,
+html.a11y-high-contrast a:hover,
+html.a11y-high-contrast [role='button']:hover {
+  filter: brightness(1.12);
+}
+
+html.a11y-high-contrast input,
+html.a11y-high-contrast select,
+html.a11y-high-contrast textarea {
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Daltonisme: réduit la dépendance à la couleur via repères et rendu plus neutre */
+html.a11y-daltonism body {
+  filter: saturate(0.85) contrast(1.06);
+}
+
+html.a11y-daltonism a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+
+html.a11y-daltonism .premium-glow,
+html.a11y-daltonism .shadow-glow {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.22) inset, 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
 }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
 
@@ -42,14 +238,7 @@ body {
 @tailwind components;
 @tailwind utilities;
 
-// Application de la charte graphique par défaut
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #0b0f19;
-  color: #f8fafc;
-  margin: 0;
-  height: 100%;
-}
+// Application de la charte graphique par défaut (géré par tokens au-dessus)
 
 /* Premium Scrollbar */
 ::-webkit-scrollbar {

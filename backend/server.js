@@ -22,6 +22,15 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'API de gestion de l\'empreinte carbone pour les chantiers BTP',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
     servers: [
       {
         url: `http://localhost:${port}`,

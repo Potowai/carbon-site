@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "Carbonsite – Palier 1 (API)",
+    "_postman_id": "3d2b7f3d-2c83-4a7d-91fe-2b6ae0d3f7cb",
+    "description": "Collection Postman pour valider le Palier 1 en entonnoir: santé -> estimation -> création + historisation.\n\nVariables attendues:\n- baseUrl: ex. http://localhost:3000\n- jwt: JWT Supabase (Bearer) nécessaire pour POST /api/sites\n\nSwagger: /api-docs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "jwt",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "siteId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0) Santé",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1) Calcul (sans historisation)",
+      "item": [
+        {
+          "name": "POST /api/sites/estimate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"concreteVolume\": 12,\n  \"steelWeight\": 1.8,\n  \"woodVolume\": 3,\n  \"energyUsage\": 950\n}\n"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/estimate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2) Historisation (création en base)",
+      "item": [
+        {
+          "name": "POST /api/sites (création site) — nécessite Bearer {{jwt}}",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Site demo Palier 1\",\n  \"surface_m2\": 1200,\n  \"nb_employes\": 24,\n  \"parking_sous_sol\": 2,\n  \"parking_sous_dalle\": 0,\n  \"parking_aerien\": 12\n}\n"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sites"
+            }
+          }
+        },
+        {
+          "name": "GET /api/sites (vérifier que le site est listé)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sites"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

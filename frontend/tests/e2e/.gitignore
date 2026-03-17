@@ -1,0 +1,19 @@
+# Playwright Test Results
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.playwright/
+
+# Test artifacts
+videos/
+screenshots/
+traces/
+
+# Environment files
+.env.test
+.env.local
+
+# IDE
+.vscode/playwright.ui.json
+.idea/playwright.xml
