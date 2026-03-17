@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS sites (
     parking_aerien INT,
     nb_employes INT,
     postes_travail INT,
+    total_carbon_tons FLOAT,
     user_id TEXT,
     created_at TIMESTAMPTZ DEFAULT now()
 );

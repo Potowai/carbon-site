@@ -11,12 +11,10 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule, 
     RouterLink, 
-    LucideAngularModule, 
+    LucideAngularModule,
     MatButtonModule
   ],
-  providers: [
-    { provide: 'LUCIDE_ICONS', useValue: { Building2, MapPin, Users, ArrowRight } }
-  ],
+  providers: [],
   template: `
     <div class="min-h-screen bg-[#0b0f19] text-white p-6 lg:p-10 font-['Inter']">
       <!-- Header -->
@@ -66,6 +64,15 @@ import { MatButtonModule } from '@angular/material/button';
                 </div>
               </div>
 
+              <!-- Palier 1: Result Display -->
+              <div class="mb-8 p-4 bg-[#10b981]/10 rounded-2xl border border-[#10b981]/20">
+                <p class="text-[10px] font-black uppercase tracking-widest text-[#10b981] mb-1">Impact Carbone Estimé</p>
+                <div class="flex items-end gap-1.5">
+                  <span class="text-3xl font-black text-white leading-none">{{ site.total_carbon_tons | number:'1.0-0' }}</span>
+                  <span class="text-xs font-bold text-gray-500 mb-1">tCO₂e</span>
+                </div>
+              </div>
+
               <button class="w-full bg-white/5 hover:bg-[#10b981] hover:text-white py-4 rounded-2xl border border-white/10 hover:border-[#10b981] transition-all flex items-center justify-center gap-2 group/btn">
                 <span class="text-xs font-black uppercase tracking-widest">Consulter les Détails</span>
                 <lucide-icon [name]="'ArrowRight'" class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform"></lucide-icon>
@@ -104,6 +111,7 @@ export class SiteListComponent implements OnInit {
   ngOnInit() {
     this.siteService.getAllSites().subscribe({
       next: (sites) => {
+        console.log('Sites received:', sites);
         this.sites = sites;
         this.loading = false;
       },

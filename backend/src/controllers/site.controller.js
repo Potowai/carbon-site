@@ -34,16 +34,36 @@ const createSite = async (req, res, next) => {
     } = req.body;
     const userId = req.auth?.userId; 
 
+    console.log('--- Site Creation Input ---');
+    console.log('Body:', req.body);
+
+    // Calcul d'estimation simplifié (Palier 1)
+    const surface = parseFloat(surface_m2) || 0;
+    const pSub = parseInt(parking_sous_sol) || 0;
+    
+    // Ratios d'estimation (en tonnes/m3)
+    const estConcrete = (surface * 1.2) + (pSub * 15); // Tons
+    const estSteel = (surface * 0.1); // Tons
+    
+    // Impact en Kg CO2eq
+    // Concrete: 200kg/m3 (approx 1 ton = 0.4m3 -> 80kg/ton?) 
+    // Let's keep it simple as per Palier 1
+    const totalKg = (estConcrete * 200) + (estSteel * 2500);
+    const totalTons = totalKg / 1000;
+
+    console.log('Estimation Results:', { estConcrete, estSteel, totalKg, totalTons });
+
     const { data: site, error } = await supabase
       .from('sites')
       .insert([
         { 
           nom, 
-          surface_m2: parseFloat(surface_m2),
+          surface_m2: surface,
           nb_employes: parseInt(nb_employes) || 0,
-          parking_sous_sol: parseInt(parking_sous_sol) || 0,
+          parking_sous_sol: pSub,
           parking_sous_dalle: parseInt(parking_sous_dalle) || 0,
           parking_aerien: parseInt(parking_aerien) || 0,
+          total_carbon_tons: totalTons,
           user_id: userId 
         }
       ])
@@ -51,6 +71,7 @@ const createSite = async (req, res, next) => {
       .single();
 
     if (error) throw error;
+    console.log('Site Created Successfully:', site);
     res.status(201).json({ success: true, data: site });
   } catch (error) {
     next(error);
