@@ -1,0 +1,148 @@
+<div class="min-h-screen bg-carbon-bg text-white p-6 lg:p-10 font-['Inter']">
+  <!-- Top Bar -->
+  <header class="flex justify-between items-center mb-12 bg-white/[0.03] backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl max-w-5xl mx-auto">
+    <div class="flex items-center gap-4">
+      <button routerLink="/dashboard" class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all group border border-white/10">
+        <svg class="w-5 h-5 text-gray-400 group-hover:text-[#10b981] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+      <h1 class="text-xl font-black tracking-tight uppercase">
+        Nouveau <span class="text-[#10b981]">Chantier</span>
+      </h1>
+    </div>
+
+    <div class="hidden md:flex items-center gap-3 bg-black/40 px-4 py-2 rounded-full border border-white/10">
+      <div class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></div>
+      <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Calculateur RE2020</span>
+    </div>
+  </header>
+
+  <div class="max-w-4xl mx-auto">
+    <div class="glass-card rounded-[2.5rem] p-4 lg:p-10">
+      
+      <!-- Stepper Customisé -->
+      <mat-stepper [linear]="true" #stepper class="bg-transparent">
+        
+        <!-- ÉTAPE 1 : Général -->
+        <mat-step [stepControl]="generalFormGroup">
+          <ng-template matStepLabel>Conception</ng-template>
+          
+          <form [formGroup]="generalFormGroup" class="flex flex-col gap-8 mt-10">
+            <div class="space-y-2">
+              <h2 class="text-2xl font-black tracking-tight">Identité du projet</h2>
+              <p class="text-gray-500 text-sm">Définissez les bases de votre évaluation carbone.</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nom de l'opération</mat-label>
+                <input matInput formControlName="nom" placeholder="Ex: Campus Via Silva" required>
+              </mat-form-field>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Surface Plancher (m²)</mat-label>
+                  <input matInput type="number" formControlName="surface_m2" placeholder="Ex: 5000">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Capacité (Employés)</mat-label>
+                  <input matInput type="number" formControlName="nb_employes" placeholder="Ex: 150">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button matStepperNext class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
+                Continuer
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- ÉTAPE 2 : Infrastructures -->
+        <mat-step [stepControl]="infraFormGroup">
+          <ng-template matStepLabel>Infrastructures</ng-template>
+          
+          <form [formGroup]="infraFormGroup" class="flex flex-col gap-8 mt-10">
+            <div class="space-y-2">
+              <h2 class="text-2xl font-black tracking-tight">Ouvrages & Parkings</h2>
+              <p class="text-gray-500 text-sm">Les infrastructures souterraines sont les plus impactantes.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Places sous-sol</mat-label>
+                <input matInput type="number" formControlName="parking_sous_sol">
+                <mat-hint>Structure lourde</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Places sous-dalle</mat-label>
+                <input matInput type="number" formControlName="parking_sous_dalle">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Places aériennes</mat-label>
+                <input matInput type="number" formControlName="parking_aerien">
+                <mat-hint>Impact réduit</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="flex justify-between items-center pt-4">
+              <button matStepperPrevious class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
+                Retour
+              </button>
+              <button matStepperNext class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
+                Suivant
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- ÉTAPE 3 : Énergie -->
+        <mat-step [stepControl]="energyFormGroup">
+          <ng-template matStepLabel>Exploitation</ng-template>
+          
+          <form [formGroup]="energyFormGroup" class="flex flex-col gap-8 mt-10">
+            <div class="space-y-2">
+              <h2 class="text-2xl font-black tracking-tight">Performance Énergétique</h2>
+              <p class="text-gray-500 text-sm">Consommations prévisionnelles annuelles.</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+              <mat-form-field appearance="outline" class="w-full lg:w-1/2">
+                <mat-label>Consommation (MWh/an)</mat-label>
+                <input matInput type="number" formControlName="energie_mwh" placeholder="Ex: 800">
+              </mat-form-field>
+
+              <div class="bg-[#10b981]/10 border border-[#10b981]/20 p-6 rounded-3xl flex items-start gap-5">
+                <div class="w-12 h-12 bg-[#10b981] rounded-2xl flex items-center justify-center shrink-0 shadow-glow">
+                  <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-black text-[#10b981] uppercase text-xs tracking-widest mb-1">Algorithme d'IA actif</h4>
+                  <p class="text-gray-300 text-sm leading-relaxed">Notre modèle CarbonCompute™ estimera automatiquement le tonnage des matériaux (béton, acier, verre) en fonction de vos saisies.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-6">
+              <button matStepperPrevious class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
+                Retour
+              </button>
+              <button (click)="submit()" class="premium-btn primary px-12 py-5 rounded-2xl font-black uppercase text-sm tracking-[0.2em] shadow-glow">
+                Générer l'Analyse
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+      </mat-stepper>
+    </div>
+  </div>
+</div>
+

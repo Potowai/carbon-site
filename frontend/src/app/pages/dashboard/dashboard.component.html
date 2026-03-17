@@ -1,0 +1,121 @@
+<div class="min-h-screen bg-[#0b0f19] text-white p-6 lg:p-10 font-['Inter']" *ngIf="!loading; else loadingState">
+  <!-- Top Bar -->
+  <header
+    class="flex justify-between items-center mb-12 bg-white/[0.03] backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl">
+    <div class="flex items-center gap-4">
+      <div
+        class="w-10 h-10 bg-[#10b981] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+        <span class="font-black text-black text-xl">C</span>
+      </div>
+      <h1 class="text-xl font-black tracking-tight flex items-center gap-2">
+        DASHBOARD <span
+          class="bg-[#10b981]/10 text-[#10b981] text-[10px] px-2 py-0.5 rounded-full border border-[#10b981]/20">ALPHA</span>
+      </h1>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <a routerLink="/add-site"
+        class="bg-[#10b981] hover:bg-[#059669] text-black font-black py-2.5 px-6 rounded-xl transition-all shadow-lg text-xs uppercase tracking-widest">
+        + Nouveau Site
+      </a>
+
+      <div
+        class="flex items-center gap-3 bg-black/40 p-1.5 pr-4 rounded-full border border-white/10 group animate-fade-in"
+        *ngIf="user$ | async as user">
+        <div
+          class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#10b981] to-[#34d399] flex items-center justify-center text-black font-black text-xs">
+          {{ user.email?.charAt(0).toUpperCase() }}
+        </div>
+        <span class="text-xs font-semibold text-gray-300 hidden sm:inline">{{ user.email }}</span>
+        <button (click)="logout()" class="text-gray-500 hover:text-red-400 transition-colors ml-2" title="Déconnexion">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- KPI Grid -->
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div
+      class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5 hover:border-[#10b981]/30 transition-all group">
+      <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Total Empreinte</p>
+      <div class="flex items-end gap-2">
+        <h3 class="text-4xl font-black text-[#34d399]">{{ stats?.total_footprint | number }}</h3>
+        <span class="text-gray-500 text-sm font-medium mb-1.5">tCO₂e</span>
+      </div>
+      <div
+        class="mt-4 flex items-center gap-2 text-[10px] text-red-400 font-bold bg-red-400/5 px-2 py-1 rounded-lg w-fit">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+        +12.5% vs cible
+      </div>
+    </div>
+
+    <div class="bg-[#161b27]/80 p-6 rounded-[2rem] border border-white/5">
+      <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Intensité Carbone</p>
+      <div class="flex items-end gap-2">
+        <h3 class="text-4xl font-black text-white">{{ stats?.carbon_intensity }}</h3>
+        <span class="text-gray-500 text-sm font-medium mb-1.5">kg/m²</span>
+      </div>
+      <div class="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+        <div class="h-full bg-[#10b981]" style="width: 65%"></div>
+      </div>
+    </div>
+
+    <div
+      class="bg-[#161b27]/80 p-1 rounded-[2rem] border border-white/5 flex flex-col justify-center items-center text-center">
+      <div class="p-5">
+        <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-3">Score Global</p>
+        <h3 class="text-5xl font-black text-[#10b981]">{{ stats?.global_score }}</h3>
+        <p class="text-gray-600 text-[10px] mt-2 italic">Standard RE2020</p>
+      </div>
+    </div>
+
+    <div
+      class="relative bg-gradient-to-br from-[#10b981] to-[#34d399] p-6 rounded-[2rem] overflow-hidden shadow-[0_20px_40px_-15px_rgba(16,185,129,0.3)]">
+      <div class="relative z-10 text-black">
+        <p class="text-black/50 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Sites Actifs</p>
+        <h3 class="text-5xl font-black">{{ stats?.active_sites }}</h3>
+        <p class="text-black/70 text-xs mt-4 leading-relaxed font-bold">Tous vos chantiers sont en conformité
+          réglementaire.</p>
+      </div>
+      <div class="absolute top-[-20%] right-[-20%] w-32 h-32 bg-white/20 blur-3xl rounded-full"></div>
+    </div>
+  </section>
+
+  <!-- Charts Row -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+    <!-- Trend Line Chart -->
+    <div class="lg:col-span-2 bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
+      <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Évolution des Émissions <span
+          class="text-gray-500 text-sm ml-2 font-medium">(tCO₂e / mois)</span></h3>
+      <div class="h-[300px]">
+        <ngx-charts-area-chart [scheme]="colorScheme" [results]="carbonTrend" [gradient]="true" [xAxis]="true"
+          [yAxis]="true" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false" [autoScale]="true"
+          [animations]="true">
+        </ngx-charts-area-chart>
+      </div>
+    </div>
+
+    <!-- Distribution Pie Chart -->
+    <div class="bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
+      <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Répartition Matériaux</h3>
+      <div class="h-[300px] flex items-center justify-center">
+        <ngx-charts-pie-chart [scheme]="colorScheme" [results]="materialDistribution" [gradient]="false" [legend]="true"
+          [legendTitle]="''" [labels]="false" [doughnut]="true" [animations]="true">
+        </ngx-charts-pie-chart>
+      </div>
+    </div>
+  </section>
+</div>
+
+<ng-template #loadingState>
+  <div class="min-h-screen bg-[#0b0f19] flex flex-col items-center justify-center gap-6">
+    <div class="w-16 h-16 border-4 border-[#10b981]/20 border-t-[#10b981] rounded-full animate-spin"></div>
+    <p class="text-[#10b981] font-black tracking-widest uppercase text-xs animate-pulse">Chargement des données...</p>
+  </div>
+</ng-template>

@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Site {
+  id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nom                String
+  surface_m2         Float?
+  parking_sous_dalle Int?
+  parking_sous_sol   Int?
+  parking_aerien     Int?
+  nb_employes        Int?
+  postes_travail     Int?
+  user_id            String?
+  created_at         DateTime        @default(now()) @db.Timestamptz
+  materiaux          Materiau[]
+  consommations      Consommation[]
+
+  @@map("sites")
+}
+
+model Materiau {
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  site_id         String  @db.Uuid
+  site            Site    @relation(fields: [site_id], references: [id], onDelete: Cascade)
+  type_materiau   String
+  quantite_tonnes Float?
+  estime_par_algo Boolean @default(false)
+
+  @@map("materiaux")
+}
+
+model Consommation {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  site_id     String @db.Uuid
+  site        Site   @relation(fields: [site_id], references: [id], onDelete: Cascade)
+  annee       Int
+  energie_mwh Float?
+
+  @@map("consommations")
+}
+
+model DashboardStat {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  site_name             String
+  total_footprint       Float?
+  carbon_intensity      Float?
+  global_score          String?
+  active_sites          Int?
+  carbon_trend          Json?
+  material_distribution Json?
+  user_id               String?
+  created_at            DateTime @default(now()) @db.Timestamptz
+
+  @@map("dashboard_stats")
+}

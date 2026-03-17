@@ -1,0 +1,68 @@
+{
+  "hackathon": {
+    "informations_generales": {
+      "nom": "Hackathon #26",
+      "dates": "16 & 17 MARS 2026",
+      "partenaire": "CAPGEMINI",
+      "sujet_principal": "Calculer l'empreinte carbone d'un site physique"
+    },
+    "architecture_retenue": {
+      "type": "Frontend PWA + Backend API (REST) + BDD Managée",
+      "frontend": "Angular configuré en PWA (Progressive Web App)",
+      "ui_ux": "Charte Noir & Vert, Formulaire type Stepper en 3 étapes",
+      "api_backend": "Node.js / Express.js (REST choisi au lieu de GraphQL pour rapidité hackathon)",
+      "authentification": "Clerk (SaaS)",
+      "base_de_donnees": "Supabase (PostgreSQL managé)",
+      "calcul_co2": "Centralisé côté Backend Express (inclut un algo prédictif)"
+    },
+    "fonctionnalite_cle_algorithme_estimation": {
+      "description": "Si l'utilisateur ne possède pas les données exactes de matériaux, l'API Express les approxime via la surface.",
+      "ratios_utilises": {
+        "beton_surface": "~1.2 tonne par m2",
+        "acier_surface": "~0.1 tonne par m2",
+        "verre_surface": "~0.02 tonne par m2",
+        "beton_parking_souterrain": "+15 tonnes par place enterrée"
+      }
+    },
+    "facteurs_emission_ademe": {
+      "materiaux": {
+        "BETON": { "valeur": 85.0, "unite": "kgCO2e/tonne" },
+        "ACIER": { "valeur": 1900.0, "unite": "kgCO2e/tonne" },
+        "VERRE": { "valeur": 1200.0, "unite": "kgCO2e/tonne" },
+        "BOIS": { "valeur": 30.0, "unite": "kgCO2e/tonne" }
+      },
+      "energie": {
+        "ELECTRICITE_FR": { "valeur": 39.4, "unite": "kgCO2e/MWh" }
+      }
+    },
+    "parcours_utilisateur_ecrans": {
+      "1_login": "Auth Clerk. Redirection forcée si token invalide.",
+      "2_home": "Liste des sites enregistrés par l'utilisateur.",
+      "3_ajouter_stepper": "Étape 1: Nom/Surface. Étape 2: Parking/Employés. Étape 3: Energie/Matériaux(opt).",
+      "4_dashboard": "Graphiques camembert et barres dynamiques pour le calcul final.",
+      "5_comparateur": "Nouvelle page dédiée pour comparer N sites côte à côte."
+    },
+    "api_rest_express_endpoints": {
+      "securite": "Toutes les routes protégées par Middleware vérifiant le Bearer JWT (Clerk).",
+      "routes": [
+        "GET /api/sites -> Lister sites utilisateur",
+        "POST /api/sites -> Créer site (Déclenche algo d'estimation si données vides)",
+        "GET /api/sites/:id/dashboard -> Renvoie site ET KPIs pré-calculés",
+        "POST /api/compare -> Compare N sites",
+        "GET /api/reference/facteurs -> Renvoie catalogue FE ADEME"
+      ]
+    },
+    "schema_supabase_bdd": {
+      "description": "Créé manuellement dans Supabase ou via migrations côté Express.",
+      "tables_principales": "sites (id, nom, surface, user_id), materiaux, consommations"
+    },
+    "couts_infrastructure": {
+      "mvp_hackathon": "0€ (Vercel Frontend, Render/Fly API, Clerk, Supabase en Free Tier)",
+      "production_estimee": "~85€/mois (Plans Pro)"
+    },
+    "criteres_evaluation": {
+      "video_pitch": { "poids_pct": 80, "points_max": 160 },
+      "livrable_technique": { "poids_pct": 20, "points_max": 40 }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment
+.env
+backend/.env
+
+# Build outputs
+dist/
+backend/dist/
+frontend/dist/
+/out-tsc
+/bazel-out
+
+# IDEs
+.idea/
+.vscode/
+.history/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Angular
+.angular/
+frontend/.angular/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Hackathon specific
+backend/prisma_gen_output.txt
+backend/debug_logs.txt
+backend/server_error.txt
+backend/server_error_2.txt
+backend/test_prisma_conn.js
