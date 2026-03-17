@@ -3,20 +3,40 @@
   <nav class="absolute top-0 left-0 w-full z-30 flex justify-between items-center px-6 lg:px-12 py-6">
     <div class="flex items-center gap-3">
       <div
-        class="w-12 h-12 bg-[#10b981] rounded-xl flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.4)] rotate-3">
-        <span class="font-black text-black text-2xl">C</span>
+        class="w-10 h-10 lg:w-12 lg:h-12 bg-[#10b981] rounded-xl flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.4)] rotate-3"
+        aria-label="CarbonSite Pro Logo">
+        <span class="font-black text-black text-xl lg:text-2xl" aria-hidden="true">C</span>
       </div>
-      <span class="text-2xl font-black tracking-tighter uppercase italic">Carbon<span
-          class="text-[#10b981]">Site</span> <span class="bg-white text-black px-2 py-0.5 rounded ml-1 not-italic text-sm">PRO</span></span>
+      <span class="text-xl lg:text-2xl font-black tracking-tighter uppercase italic">Carbon<span
+          class="text-[#10b981]">Site</span> <span class="bg-white text-black px-2 py-0.5 rounded ml-1 not-italic text-[10px] lg:text-sm">PRO</span></span>
     </div>
-    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
-      <a href="#" class="hover:text-[#10b981] transition-colors">Solutions</a>
-      <a href="#" class="hover:text-[#10b981] transition-colors">Réglementation</a>
-      <a href="#" class="hover:text-[#10b981] transition-colors">Partenaires</a>
+    <div class="flex items-center gap-4 lg:gap-8 text-xs lg:text-sm font-medium text-gray-400">
+      <a href="#" class="hidden sm:inline hover:text-[#10b981] transition-colors">Solutions</a>
+      <a href="#" class="hidden lg:inline hover:text-[#10b981] transition-colors">Réglementation</a>
       <button (click)="toggleMode()"
-        class="px-5 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+        class="hidden sm:block px-4 py-2 lg:px-5 lg:py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-[10px] lg:text-xs font-black uppercase tracking-widest">
         {{ isLogin ? 'S\'inscrire' : 'Connexion' }}
       </button>
+      
+      <!-- Burger Toggle (Mobile Only) -->
+      <button (click)="toggleMenu()" class="sm:hidden p-2 text-white bg-white/5 rounded-xl border border-white/10" aria-label="Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="absolute top-full left-0 w-full p-6 animate-slide-down sm:hidden" *ngIf="isMenuOpen">
+      <div class="glass-panel p-6 rounded-3xl flex flex-col gap-4 shadow-2xl">
+        <a href="#" class="text-white font-bold uppercase tracking-widest text-xs py-2">Solutions</a>
+        <a href="#" class="text-white font-bold uppercase tracking-widest text-xs py-2">Réglementation</a>
+        <button (click)="toggleMode(); isMenuOpen = false"
+          class="w-full py-4 rounded-xl bg-[#10b981] text-black font-black uppercase tracking-widest text-xs shadow-glow">
+          {{ isLogin ? 'S\'inscrire' : 'Connexion' }}
+        </button>
+      </div>
     </div>
   </nav>
 

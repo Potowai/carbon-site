@@ -5,7 +5,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
-import { LucideAngularModule, Building2, MapPin, Users, ArrowRight } from 'lucide-angular';
+import { LucideAngularModule, Building2, MapPin, Users, ArrowRight, LayoutDashboard, Database, LogOut, Filter, Calendar, Download, RefreshCw, HardHat, ChevronLeft } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +17,13 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    { provide: 'LUCIDE_ICONS', useValue: { Building2, MapPin, Users, ArrowRight } }
+    { 
+      provide: 'LUCIDE_ICONS', 
+      useValue: { 
+        Building2, MapPin, Users, ArrowRight, LayoutDashboard, 
+        Database, LogOut, Filter, Calendar, Download, 
+        RefreshCw, HardHat, ChevronLeft 
+      } 
+    }
   ]
 };

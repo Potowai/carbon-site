@@ -1,46 +1,125 @@
 <div class="min-h-screen bg-[#0b0f19] text-white p-6 lg:p-10 font-['Inter']" *ngIf="!loading; else loadingState">
   <!-- Top Bar -->
   <header
-    class="flex justify-between items-center mb-12 bg-white/[0.03] backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl">
-    <div class="flex items-center gap-4">
-      <div
-        class="w-10 h-10 bg-[#10b981] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-        <span class="font-black text-black text-xl">C</span>
+    class="flex flex-col lg:flex-row justify-between items-center mb-8 lg:mb-12 bg-white/[0.03] backdrop-blur-md p-4 lg:p-6 rounded-3xl border border-white/5 shadow-2xl gap-6 lg:gap-0 relative z-50">
+    <div class="flex items-center gap-4 w-full lg:w-auto justify-between lg:justify-start">
+      <div class="flex items-center gap-4">
+        <a routerLink="/dashboard"
+          class="w-10 h-10 bg-[#10b981] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+          aria-label="CarbonSite Pro Logo">
+          <span class="font-black text-black text-xl" aria-hidden="true">C</span>
+        </a>
+        <h1 class="text-xl font-black tracking-tight flex items-center gap-2">
+          DASHBOARD <span
+            class="bg-[#10b981]/10 text-[#10b981] text-[10px] px-2 py-0.5 rounded-full border border-[#10b981]/20">ALPHA</span>
+        </h1>
       </div>
-      <h1 class="text-xl font-black tracking-tight flex items-center gap-2">
-        DASHBOARD <span
-          class="bg-[#10b981]/10 text-[#10b981] text-[10px] px-2 py-0.5 rounded-full border border-[#10b981]/20">ALPHA</span>
-      </h1>
+      
+      <div class="flex items-center gap-3 lg:hidden">
+        <!-- Burger Button -->
+        <button (click)="toggleMenu()" class="p-2 text-white bg-white/5 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#10b981]" [aria-label]="isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'" [aria-expanded]="isMenuOpen">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <div class="flex items-center gap-4 lg:gap-6">
-      <a routerLink="/sites"
-        class="bg-white/10 hover:bg-[#10b981] hover:text-white text-white font-black py-2.5 px-6 rounded-xl transition-all border border-white/20 text-xs uppercase tracking-widest flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-        Consulter un site
-      </a>
-      <a routerLink="/add-site"
-        class="bg-[#10b981] hover:bg-[#059669] text-black font-black py-2.5 px-6 rounded-xl transition-all shadow-lg text-xs uppercase tracking-widest">
-        + Nouveau Site
-      </a>
+    <!-- Desktop Menu -->
+    <div class="hidden lg:flex items-center gap-4 lg:gap-6">
+      <div class="flex items-center gap-4">
+        <a routerLink="/sites"
+          class="bg-white/10 hover:bg-[#10b981] hover:text-white text-white font-black py-2.5 px-6 rounded-xl transition-all border border-white/20 text-xs uppercase tracking-widest flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+          Sites
+        </a>
+        <a routerLink="/add-site"
+          class="bg-[#10b981] hover:bg-[#059669] text-black font-black py-2.5 px-6 rounded-xl transition-all shadow-lg text-xs uppercase tracking-widest">
+          + Nouveau
+        </a>
+      </div>
 
       <div
-        class="flex items-center gap-3 bg-black/40 p-1.5 pr-4 rounded-full border border-white/10 group animate-fade-in"
+        class="hidden lg:flex items-center gap-3 bg-black/40 p-1.5 pr-4 rounded-full border border-white/10 group animate-fade-in"
         *ngIf="user$ | async as user">
         <div
           class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#10b981] to-[#34d399] flex items-center justify-center text-black font-black text-xs">
           {{ user.email?.charAt(0).toUpperCase() }}
         </div>
-        <span class="text-xs font-semibold text-gray-300 hidden sm:inline">{{ user.email }}</span>
-        <button (click)="logout()" class="text-gray-500 hover:text-red-400 transition-colors ml-2" title="Déconnexion">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <span class="text-xs font-semibold text-gray-300">{{ user.email }}</span>
+        <button (click)="logout()" class="text-gray-500 hover:text-red-400 transition-colors ml-2" title="Déconnexion" aria-label="Déconnexion">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
         </button>
       </div>
     </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="lg:hidden w-full flex-col gap-4 animate-slide-down" [class.flex]="isMenuOpen" [class.hidden]="!isMenuOpen">
+      <div class="flex flex-col gap-3 p-4 bg-white/[0.02] rounded-2xl border border-white/5">
+        <a routerLink="/sites" (click)="isMenuOpen = false"
+          class="w-full bg-white/5 hover:bg-[#10b981] hover:text-white text-white font-black py-4 px-6 rounded-xl transition-all border border-white/10 text-[10px] uppercase tracking-widest flex items-center gap-3">
+          <lucide-icon name="building-2" class="w-4 h-4"></lucide-icon>
+          Consulter les Sites
+        </a>
+        <a routerLink="/add-site" (click)="isMenuOpen = false"
+          class="w-full bg-[#10b981] hover:bg-[#059669] text-black font-black py-4 px-6 rounded-xl transition-all shadow-lg text-[10px] uppercase tracking-widest text-center">
+          + Ajouter un nouveau site
+        </a>
+        <div class="h-px bg-white/5 my-2"></div>
+        <button (click)="logout()" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold py-4 px-6 rounded-xl transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-3">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Se déconnecter
+        </button>
+      </div>
+    </div>
   </header>
+
+  <!-- Actions Bar & Filters -->
+  <section class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <div class="flex items-center gap-3 bg-white/[0.03] p-1.5 rounded-2xl border border-white/5 w-full md:w-auto">
+      <button 
+        (click)="setTimeRange('7d')"
+        [class.bg-[#10b981]]="selectedTimeRange === '7d'"
+        [class.text-black]="selectedTimeRange === '7d'"
+        [class.bg-transparent]="selectedTimeRange !== '7d'"
+        class="flex-1 md:flex-none px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+        7 Jours
+      </button>
+      <button 
+        (click)="setTimeRange('30d')"
+        [class.bg-[#10b981]]="selectedTimeRange === '30d'"
+        [class.text-black]="selectedTimeRange === '30d'"
+        [class.bg-transparent]="selectedTimeRange !== '30d'"
+        class="flex-1 md:flex-none px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+        30 Jours
+      </button>
+      <button 
+        (click)="setTimeRange('1y')"
+        [class.bg-[#10b981]]="selectedTimeRange === '1y'"
+        [class.text-black]="selectedTimeRange === '1y'"
+        [class.bg-transparent]="selectedTimeRange !== '1y'"
+        class="flex-1 md:flex-none px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+        1 An
+      </button>
+    </div>
+
+    <div class="flex items-center gap-4 w-full md:w-auto">
+      <button class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 px-6 py-3 rounded-xl border border-white/10 text-[10px] font-black uppercase tracking-widest transition-all">
+        <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
+        Export PDF
+      </button>
+      <button (click)="loadDashboardData()" class="p-3 bg-[#10b981] text-black rounded-xl shadow-lg hover:rotate-180 transition-all duration-500">
+        <lucide-icon name="refresh-cw" class="w-5 h-5"></lucide-icon>
+      </button>
+    </div>
+  </section>
 
   <!-- KPI Grid -->
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
@@ -83,9 +162,9 @@
     <div
       class="relative bg-gradient-to-br from-[#10b981] to-[#34d399] p-6 rounded-[2rem] overflow-hidden shadow-[0_20px_40px_-15px_rgba(16,185,129,0.3)]">
       <div class="relative z-10 text-black">
-        <p class="text-black/50 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Sites Actifs</p>
+        <p class="text-black/80 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Sites Actifs</p>
         <h3 class="text-5xl font-black">{{ stats?.active_sites }}</h3>
-        <p class="text-black/70 text-xs mt-4 leading-relaxed font-bold">Tous vos chantiers sont en conformité
+        <p class="text-black/90 text-xs mt-4 leading-relaxed font-bold">Tous vos chantiers sont en conformité
           réglementaire.</p>
       </div>
       <div class="absolute top-[-20%] right-[-20%] w-32 h-32 bg-white/20 blur-3xl rounded-full"></div>
@@ -98,14 +177,21 @@
     <div class="lg:col-span-2 bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
       <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Évolution des Émissions <span
           class="text-gray-500 text-sm ml-2 font-medium">(tCO₂e / mois)</span></h3>
-      <div class="h-[300px] flex items-center justify-center">
-        <ngx-charts-area-chart *ngIf="carbonTrend.length > 0 && carbonTrend[0]?.series?.length > 0; else noTrend"
-          [scheme]="colorScheme" [results]="carbonTrend" [gradient]="true" [xAxis]="true"
-          [yAxis]="true" [legend]="true" [legendTitle]="''" [showXAxisLabel]="false" [showYAxisLabel]="false" [autoScale]="true"
-          [animations]="true">
-        </ngx-charts-area-chart>
+      <div class="h-[300px]">
+        <apx-chart
+          *ngIf="lineChartOptions?.series && lineChartOptions.series.length > 0; else noTrend"
+          [series]="lineChartOptions.series!"
+          [chart]="lineChartOptions.chart!"
+          [xaxis]="lineChartOptions.xaxis!"
+          [dataLabels]="lineChartOptions.dataLabels!"
+          [grid]="lineChartOptions.grid!"
+          [stroke]="lineChartOptions.stroke!"
+          [fill]="lineChartOptions.fill!"
+          [tooltip]="lineChartOptions.tooltip!"
+          [colors]="lineChartOptions.colors!">
+        </apx-chart>
         <ng-template #noTrend>
-          <div class="text-gray-600 text-sm font-medium uppercase tracking-widest italic">Aucune donnée d'évolution disponible</div>
+          <div class="h-full flex items-center justify-center text-gray-600 text-sm font-medium uppercase tracking-widest italic">Aucune donnée d'évolution disponible</div>
         </ng-template>
       </div>
     </div>
@@ -113,13 +199,20 @@
     <!-- Distribution Pie Chart -->
     <div class="bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
       <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Répartition Matériaux</h3>
-      <div class="h-[300px] flex items-center justify-center">
-        <ngx-charts-pie-chart *ngIf="materialDistribution.length > 0; else noDist"
-          [scheme]="colorScheme" [results]="materialDistribution" [gradient]="false" [legend]="true"
-          [legendPosition]="LegendPosition.Below" [legendTitle]="'Répartition'" [labels]="false" [doughnut]="true" [animations]="true">
-        </ngx-charts-pie-chart>
+      <div class="h-[300px]">
+        <apx-chart
+          *ngIf="pieChartOptions?.series && pieChartOptions.series.length > 0; else noDist"
+          [series]="pieChartOptions.series!"
+          [chart]="pieChartOptions.chart!"
+          [labels]="pieChartOptions.labels!"
+          [colors]="pieChartOptions.colors!"
+          [legend]="pieChartOptions.legend!"
+          [plotOptions]="pieChartOptions.plotOptions!"
+          [stroke]="pieChartOptions.stroke!"
+          [tooltip]="pieChartOptions.tooltip!">
+        </apx-chart>
         <ng-template #noDist>
-          <div class="text-gray-600 text-sm font-medium uppercase tracking-widest italic text-center">Répartition non disponible</div>
+          <div class="h-full flex items-center justify-center text-gray-600 text-sm font-medium uppercase tracking-widest italic text-center">Répartition non disponible</div>
         </ng-template>
       </div>
     </div>

@@ -17,6 +17,11 @@ export class HomeComponent {
   email = '';
   password = '';
   loading = false;
+  isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
   constructor(
     private auth: AuthService, 

@@ -9,6 +9,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SiteService } from '../../services/site.service';
 import { AuthService } from '../../services/auth.service';
+import { LucideAngularModule, Building2, LayoutDashboard, ChevronLeft } from 'lucide-angular';
 
 @Component({
   selector: 'app-add-site',
@@ -20,15 +21,23 @@ import { AuthService } from '../../services/auth.service';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    LucideAngularModule
   ],
   templateUrl: './add-site.component.html',
-  styleUrl: './add-site.component.scss'
 })
 export class AddSiteComponent {
   generalFormGroup: FormGroup;
   infraFormGroup: FormGroup;
   energyFormGroup: FormGroup;
+  isMenuOpen = false;
+  isSubmitting = false;
+  analysisResult: any = null;
+  step = 1;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
   constructor(
     private _formBuilder: FormBuilder, 
@@ -56,6 +65,7 @@ export class AddSiteComponent {
   }
 
   async submit() {
+    this.isSubmitting = true;
     const payload = {
       ...this.generalFormGroup.value,
       ...this.infraFormGroup.value,
@@ -69,14 +79,22 @@ export class AddSiteComponent {
       };
 
       this.siteService.createSite(payload, headers).subscribe({
-        next: (site) => {
-          this.snackBar.open("Site ajouté avec succès !", "OK", {
+        next: (response: any) => {
+          this.isSubmitting = false;
+          this.analysisResult = response.data;
+          console.log('Analysis result received:', this.analysisResult);
+          
+          this.snackBar.open("Site ajouté avec succès ! Impact Carbone Estimé: " + 
+            (this.analysisResult?.total_carbon_tons ? this.analysisResult.total_carbon_tons.toFixed(2) + " tCO₂e" : "N/A"), "OK", {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
+          
+          // Re-estimate on backend happens correctly now.
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
+          this.isSubmitting = false;
           this.snackBar.open("Erreur lors de l'ajout du site.", "Réessayer", {
             duration: 5000,
             panelClass: ['error-snackbar']
@@ -85,6 +103,7 @@ export class AddSiteComponent {
         }
       });
     } catch (err) {
+      this.isSubmitting = false;
       console.error(err);
     }
   }
