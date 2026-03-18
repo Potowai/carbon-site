@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SiteService } from '../../services/site.service';
+import { PdfExportService } from '../../services/pdf-export.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { NgApexchartsModule, ChartComponent } from 'ng-apexcharts';
 import { ApexOptions } from 'ng-apexcharts';
@@ -64,7 +65,7 @@ export class SiteDetailComponent implements OnInit, OnDestroy {
     responsive: []
   };
 
-  constructor(private route: ActivatedRoute, private siteService: SiteService) {}
+  constructor(private route: ActivatedRoute, private siteService: SiteService, private pdfExportService: PdfExportService) {}
 
   ngOnInit() {
     this.sub = this.route.paramMap.subscribe((params) => {
@@ -182,6 +183,33 @@ export class SiteDetailComponent implements OnInit, OnDestroy {
     // Score basé sur la surface (plus grand = meilleur pour réduire l'intensité)
     const surface = this.site?.surface_m2 || 0;
     return Math.min(100, Math.max(0, 50 + (surface / 100)));
+  }
+
+  async exportReport() {
+    if (!this.site) {
+      console.error('[SiteDetailComponent] No site data to export');
+      return;
+    }
+
+    try {
+      console.log('[SiteDetailComponent] Starting PDF export for site:', this.site.nom);
+      const filename = `rapport-site-${this.site.nom.replace(/\s+/g, '-')}-${new Date().getTime()}.pdf`;
+      await this.pdfExportService.exportSiteReportToPdf(this.site, filename);
+      console.log('[SiteDetailComponent] ✓ Report exported successfully');
+    } catch (error) {
+      console.error('[SiteDetailComponent] ✗ Error exporting report:', error);
+    }
+  }
+
+  async exportAsFullPdf() {
+    try {
+      console.log('[SiteDetailComponent] Exporting full page as PDF');
+      const filename = `site-detail-${this.site?.nom.replace(/\s+/g, '-')}-${new Date().getTime()}.pdf`;
+      await this.pdfExportService.exportElementToPdf('site-detail-container', filename);
+      console.log('[SiteDetailComponent] ✓ Full page exported successfully');
+    } catch (error) {
+      console.error('[SiteDetailComponent] ✗ Error exporting full page:', error);
+    }
   }
 }
 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SiteService } from '../../services/site.service';
+import { PdfExportService } from '../../services/pdf-export.service';
 import { Observable, forkJoin } from 'rxjs';
 import { LucideAngularModule, Building2, LayoutDashboard, Database, LogOut, Filter, Calendar, Download, RefreshCw } from 'lucide-angular';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -86,6 +87,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private auth: AuthService, 
     private siteService: SiteService,
+    private pdfExportService: PdfExportService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
@@ -427,5 +429,21 @@ export class DashboardComponent implements OnInit {
   async logout() {
     await this.auth.signOut();
     this.router.navigate(['/']);
+  }
+
+  async exportDashboardPdf() {
+    try {
+      console.log('[DashboardComponent] Exporting dashboard to PDF');
+      const filename = `dashboard-rapport-${new Date().getTime()}.pdf`;
+      await this.pdfExportService.exportElementToPdf('dashboard-container', filename);
+      console.log('[DashboardComponent] ✓ Dashboard exported successfully');
+      this.snackBar.open('Dashboard exporté en PDF avec succès!', 'Fermer', { duration: 3000 });
+    } catch (error) {
+      console.error('[DashboardComponent] ✗ Error exporting dashboard:', error);
+      this.snackBar.open('Erreur lors de l\'export du PDF', 'Fermer', { 
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    }
   }
 }

@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { SiteService } from '../../services/site.service';
+import { PdfExportService } from '../../services/pdf-export.service';
 import { LucideAngularModule } from 'lucide-angular';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 type Site = {
   id: string | number;
@@ -25,6 +27,7 @@ type Site = {
     FormsModule,
     RouterLink,
     LucideAngularModule,
+    MatSnackBarModule,
   ],
   templateUrl: './site-list.component.html',
   styleUrl: './site-list.component.scss',
@@ -72,7 +75,11 @@ export class SiteListComponent implements OnInit {
 
   trackBySiteId = (_: number, site: Site) => site.id;
 
-  constructor(private siteService: SiteService) {}
+  constructor(
+    private siteService: SiteService,
+    private pdfExportService: PdfExportService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     this.loadSites();

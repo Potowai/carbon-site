@@ -23,7 +23,8 @@ import {
   RefreshCw, 
   HardHat, 
   ChevronLeft,
-  List
+  List,
+  FileText
 } from 'lucide-angular';
 
 /**

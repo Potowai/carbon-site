@@ -9,6 +9,22 @@
         <p class="text-muted text-[10px] lg:text-xs font-medium uppercase tracking-widest mt-0.5 lg:mt-1">Fiche chantier détaillée</p>
       </div>
     </div>
+    <div class="flex gap-3 w-full lg:w-auto">
+      <button 
+        (click)="exportReport()" 
+        class="px-4 py-2 btn-primary rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2"
+        title="Exporter le rapport en PDF">
+        <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
+        Rapport PDF
+      </button>
+      <button 
+        (click)="exportAsFullPdf()" 
+        class="px-4 py-2 btn-ghost rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2"
+        title="Exporter la page complète">
+        <lucide-icon name="file-text" class="w-4 h-4"></lucide-icon>
+        Page complète
+      </button>
+    </div>
   </header>
 
   <section *ngIf="loading" class="flex flex-col items-center justify-center py-24 app-card-soft rounded-[3rem]">
@@ -21,7 +37,7 @@
     <a routerLink="/sites" class="btn-outline inline-flex px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest">Retour liste</a>
   </section>
 
-  <section *ngIf="!loading && site" class="space-y-8">
+  <section id="site-detail-container" *ngIf="!loading && site" class="space-y-8">
     <!-- HEADER INFO -->
     <div class="app-card rounded-[2.5rem] p-8">
       <div class="flex items-start justify-between gap-6 mb-8 flex-col lg:flex-row">
