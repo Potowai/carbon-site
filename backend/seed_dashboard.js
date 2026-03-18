@@ -110,6 +110,7 @@ async function seedDatabase() {
         parking_sous_sol: site.parking_sous_sol,
         parking_sous_dalle: site.parking_sous_dalle,
         parking_aerien: site.parking_aerien,
+        total_carbon_tons: totalTons,
         created_at: createdDate.toISOString(),
       };
     });

@@ -1,9 +1,16 @@
 jest.mock('../controllers/site.controller', () => ({
   getAllSites: jest.fn(),
+  getMySites: jest.fn(),
+  getSiteById: jest.fn(),
   createSite: jest.fn(),
   estimateCarbon: jest.fn(),
   getGlobalDashboard: jest.fn(),
 }));
+
+jest.mock('../middlewares/auth', () => (req, _res, next) => {
+  req.auth = { userId: 'test-user' };
+  next();
+});
 
 
 const router = require('./site.routes');
@@ -41,5 +48,21 @@ describe('site routes', () => {
 
     expect(route).toBeDefined();
     expect(route.route.stack[0].handle).toBe(siteController.getGlobalDashboard);
+  });
+
+  it('registers GET /me with getMySites controller (auth protected)', () => {
+    const route = findRoute('/me', 'get');
+
+    expect(route).toBeDefined();
+    expect(route.route.stack.length).toBeGreaterThanOrEqual(2);
+    expect(route.route.stack[1].handle).toBe(siteController.getMySites);
+  });
+
+  it('registers GET /:id with getSiteById controller (auth protected)', () => {
+    const route = findRoute('/:id', 'get');
+
+    expect(route).toBeDefined();
+    expect(route.route.stack.length).toBeGreaterThanOrEqual(2);
+    expect(route.route.stack[1].handle).toBe(siteController.getSiteById);
   });
 });

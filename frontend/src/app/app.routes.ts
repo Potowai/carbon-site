@@ -22,6 +22,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'add-site', component: AddSiteComponent, canActivate: [authGuard] },
   { path: 'sites', component: SiteListComponent, canActivate: [authGuard] },
-  { path: 'site/:id', component: SiteDetailComponent, canActivate: [authGuard] },
+  { path: 'sites/:id', component: SiteDetailComponent, canActivate: [authGuard] },
+  { path: 'site/:id', component: SiteDetailComponent },
   { path: '**', redirectTo: '' }
 ];

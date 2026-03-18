@@ -1,5 +1,8 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://carbon-site-back.netlify.app/api'
+  supabaseUrl: '',
+  supabaseKey: '',
+  apiUrl: 'https://carbon-site-back.netlify.app/api',
+  configUrl: 'https://carbon-site-back.netlify.app/api/config'
 };
 

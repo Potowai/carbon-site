@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const siteController = require('../controllers/site.controller');
+const authMiddleware = require('../middlewares/auth');
 
 /**
  * @swagger
@@ -187,5 +188,55 @@ router.post('/estimate', siteController.estimateCarbon);
  *         description: Erreur lors du calcul des statistiques
  */
 router.get('/global-dashboard', siteController.getGlobalDashboard);
+
+/**
+ * @swagger
+ * /api/sites/me:
+ *   get:
+ *     summary: Récupérer tous les sites liés à l'utilisateur connecté
+ *     tags: [Sites]
+ *     responses:
+ *       200:
+ *         description: Liste de nos sites
+ */
+router.get('/me', authMiddleware, siteController.getMySites);
+
+/**
+ * @swagger
+ * /api/sites/{id}:
+ *   get:
+ *     summary: Récupérer les informations d'un site spécifique
+ *     description: |
+ *       Récupère les détails complets d'un site par son ID.
+ *       Inclut l'empreinte carbone calculée à partir de la surface.
+ *     tags: [Sites]
+ *     operationId: getSiteById
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID unique du site (UUID)
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         example: "8d8f6db7-418f-4792-b977-d1bf4f4a0df0"
+ *     responses:
+ *       200:
+ *         description: Détails complètes du site
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Site'
+ *       404:
+ *         description: Site introuvable
+ *       500:
+ *         description: Erreur serveur
+ */
+router.get('/:id', authMiddleware, siteController.getSiteById);
 
 module.exports = router;

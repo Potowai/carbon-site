@@ -198,43 +198,55 @@
       </div>
     </div>
 
-    <!-- Distribution Pie Chart -->
-    <div class="app-card p-8 rounded-[2.5rem]">
-      <h3 class="text-lg font-black mb-8 tracking-tight uppercase">Répartition Matériaux</h3>
-      <div class="h-[350px]">
-        <apx-chart
-          *ngIf="pieChartOptions.series && pieChartOptions.series.length > 0; else noDist"
-          [series]="pieChartOptions.series!"
-          [chart]="pieChartOptions.chart!"
-          [labels]="pieChartOptions.labels!"
-          [colors]="pieChartOptions.colors!"
-          [legend]="pieChartOptions.legend!"
-          [plotOptions]="pieChartOptions.plotOptions!"
-          [stroke]="pieChartOptions.stroke!"
-          [tooltip]="pieChartOptions.tooltip!">
-        </apx-chart>
-        <ng-template #noDist>
-          <div class="h-full flex items-center justify-center text-muted text-sm font-medium uppercase tracking-widest italic text-center">Répartition non disponible</div>
-        </ng-template>
+    <!-- Right Column: Pie Charts -->
+    <div class="flex flex-col gap-8">
+      <!-- Distribution Pie Chart -->
+      <div class="app-card p-8 rounded-[2.5rem]">
+        <h3 class="text-lg font-black mb-8 tracking-tight uppercase">Répartition Matériaux</h3>
+        <div class="h-[250px]">
+          <apx-chart
+            *ngIf="pieChartOptions.series && pieChartOptions.series.length > 0; else noDist"
+            [series]="pieChartOptions.series!"
+            [chart]="pieChartOptions.chart!"
+            [labels]="pieChartOptions.labels!"
+            [colors]="pieChartOptions.colors!"
+            [legend]="pieChartOptions.legend!"
+            [plotOptions]="pieChartOptions.plotOptions!"
+            [stroke]="pieChartOptions.stroke!"
+            [tooltip]="pieChartOptions.tooltip!">
+          </apx-chart>
+          <ng-template #noDist>
+            <div class="h-full flex items-center justify-center text-muted text-sm font-medium uppercase tracking-widest italic text-center">Répartition non disponible</div>
+          </ng-template>
+        </div>
       </div>
 
-      <!-- Material Details -->
-      <div class="mt-8 pt-6 border-t border-app space-y-3" *ngIf="materialDistribution && materialDistribution.length > 0">
-        <h4 class="text-xs font-black uppercase tracking-widest text-muted mb-4">Détails</h4>
-        <div class="space-y-2"
-          *ngFor="let material of materialDistribution; let i = index"
-          [style.borderLeft]="'3px solid ' + (pieChartOptions.colors ? pieChartOptions.colors[i] : '#999')">
-          <div class="pl-3 flex justify-between items-center">
-            <span class="text-xs font-bold text-muted-2">{{ material.name }}</span>
-            <span class="text-sm font-black">{{ material.value | number : '1.0-0' }} tCO₂e</span>
-          </div>
-          <div class="pl-3 h-1.5 app-divider rounded-full overflow-hidden">
-            <div 
-              class="h-full rounded-full"
-              [style.backgroundColor]="pieChartOptions.colors ? pieChartOptions.colors[i] : '#999'"
-              [style.width]="(material.percentage || 0) + '%'"
-            >
-            </div>
+      <!-- Construction vs Exploitation Chart (Palier 2) -->
+      <div class="app-card p-8 rounded-[2.5rem]">
+        <h3 class="text-lg font-black mb-8 tracking-tight uppercase">Construction vs Exploitation</h3>
+        <div class="h-[250px]">
+          <apx-chart
+            *ngIf="typeChartOptions.series && typeChartOptions.series.length > 0; else noType"
+            [series]="typeChartOptions.series!"
+            [chart]="typeChartOptions.chart!"
+            [labels]="typeChartOptions.labels!"
+            [colors]="typeChartOptions.colors!"
+            [legend]="typeChartOptions.legend!"
+            [plotOptions]="typeChartOptions.plotOptions!"
+            [stroke]="typeChartOptions.stroke!"
+            [tooltip]="typeChartOptions.tooltip!">
+          </apx-chart>
+          <ng-template #noType>
+            <div class="h-full flex items-center justify-center text-muted text-sm font-medium uppercase tracking-widest italic text-center">Données de type non disponibles</div>
+          </ng-template>
+        </div>
+        <div class="mt-4 flex flex-col gap-2">
+          <div *ngFor="let item of constructionVsExploitation; let i = index" class="flex justify-between items-center text-xs">
+            <span class="font-bold text-muted-2 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full" [style.backgroundColor]="typeChartOptions.colors ? typeChartOptions.colors[i] : '#999'"></span>
+              {{ item.name }}
+            </span>
+            <span class="font-black">{{ item.value | number : '1.0-0' }} tCO₂e</span>
           </div>
         </div>
       </div>

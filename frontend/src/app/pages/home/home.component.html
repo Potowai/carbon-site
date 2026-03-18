@@ -52,13 +52,14 @@
   </div>
 
   <!-- Hero Section -->
-  <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 lg:px-12 max-w-7xl mx-auto">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
+  <div class="relative pt-32 pb-24 lg:pt-40 lg:pb-40 px-6 lg:px-12 max-w-8xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
       <!-- HERO LEFT -->
-      <div class="space-y-10 z-10">
+      <div class="space-y-12 z-10">
+        <!-- Badge -->
         <div
-          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-accent text-xs font-bold tracking-widest uppercase animate-fade-in shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+          class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full badge-accent text-xs font-black tracking-widest uppercase animate-fade-in shadow-[0_0_20px_rgba(16,185,129,0.15)]">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full" style="background: var(--app-accent); opacity: .75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2" style="background: var(--app-accent)"></span>
@@ -66,91 +67,114 @@
           Nouvelle Certification RE2020 Disponible
         </div>
 
-        <h1 class="text-6xl lg:text-9xl font-black leading-[0.85] tracking-tighter">
-          ACTIVATE <br>
-          <span
-            class="text-transparent bg-clip-text bg-gradient-to-br from-[#10b981] via-[#34d399] to-[#60a5fa] animate-gradient-x">SUSTAINABLE</span>
-          <br>
-          IMPACT
-        </h1>
+        <!-- Heading -->
+        <div>
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.0] tracking-tighter mb-6">
+            ACTIVATE
+          </h1>
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.0] tracking-tighter mb-6">
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-br from-[#10b981] via-[#34d399] to-[#60a5fa] animate-gradient-x">SUSTAINABLE</span>
+          </h1>
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.0] tracking-tighter">
+            IMPACT
+          </h1>
+        </div>
 
-        <p class="text-muted text-lg lg:text-xl leading-relaxed max-w-lg">
-          La seule plateforme BTP combinant <span class="font-medium">intelligence artificielle</span> et
-          <span class="font-medium">données FDES</span> pour réduire l'empreinte de vos chantiers jusqu'à
-          -30%.
+        <!-- Description -->
+        <p class="text-muted text-base lg:text-lg leading-relaxed max-w-xl">
+          La seule plateforme BTP combinant <span class="text-white font-semibold">intelligence artificielle</span> et
+          <span class="text-white font-semibold">données FDES</span> pour réduire l'empreinte de vos chantiers jusqu'à
+          <span class="text-[#10b981] font-black">-30%</span>.
         </p>
 
-        <div class="flex flex-wrap gap-4 pt-4">
-          <div class="flex items-center gap-2 text-sm text-muted">
-            <svg class="w-5 h-5" style="color: var(--app-accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        <!-- Features -->
+        <div class="space-y-3 pt-2">
+          <div class="flex items-center gap-3 text-sm text-muted">
+            <svg class="w-5 h-5 flex-shrink-0" style="color: var(--app-accent)" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path>
             </svg>
-            Audit complet
+            <span>Audit complet des matériaux</span>
           </div>
-          <div class="flex items-center gap-2 text-sm text-muted">
-            <svg class="w-5 h-5" style="color: var(--app-accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          <div class="flex items-center gap-3 text-sm text-muted">
+            <svg class="w-5 h-5 flex-shrink-0" style="color: var(--app-accent)" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path>
             </svg>
-            Conformité RE2020
+            <span>Conformité RE2020 garantie</span>
           </div>
-          <div class="flex items-center gap-2 text-sm text-muted">
-            <svg class="w-5 h-5" style="color: var(--app-accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          <div class="flex items-center gap-3 text-sm text-muted">
+            <svg class="w-5 h-5 flex-shrink-0" style="color: var(--app-accent)" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path>
             </svg>
-            Export Rapports
+            <span>Rapports d'export instantanés</span>
           </div>
         </div>
       </div>
 
       <!-- HERO RIGHT (AUTH FORM) -->
       <div class="relative z-10 flex justify-center lg:justify-end animate-slide-up-fancy text-left">
-        <div class="absolute -inset-1 bg-gradient-to-r from-[#10b981] to-[#34d399] rounded-[2rem] blur opacity-20">
-        </div>
-        <div class="relative glass-panel p-10 rounded-[2rem] shadow-3xl w-full max-w-md overflow-hidden">
+        <div class="absolute -inset-1 bg-gradient-to-br from-[#10b981]/20 to-[#34d399]/10 rounded-[2.5rem] blur-2xl"></div>
+        <div class="relative glass-panel p-10 lg:p-12 rounded-[2.5rem] shadow-2xl w-full max-w-md">
 
           <!-- Form Header -->
-          <div class="mb-8">
-            <h2 class="text-3xl font-black mb-2 tracking-tight">{{ isLogin ? 'Access Portal' : 'Join the Elite' }}</h2>
-            <div class="h-1.5 w-12 bg-gradient-to-r from-[#10b981] to-[#34d399] rounded-full"></div>
+          <div class="mb-10">
+            <h2 class="text-2xl lg:text-3xl font-black tracking-tight leading-tight">{{ isLogin ? 'Access Portal' : 'Join the Elite' }}</h2>
+            <div class="h-1 w-16 bg-gradient-to-r from-[#10b981] to-[#34d399] rounded-full mt-3"></div>
           </div>
 
-          <form (submit)="handleSubmit()" class="space-y-6">
-            <div class="space-y-1.5">
-              <label class="text-[10px] font-black uppercase tracking-[0.2em] ml-1">Email
-                Entreprise</label>
-              <div class="relative group">
-                <input type="email" [(ngModel)]="email" name="email" required
-                  class="app-input rounded-2xl px-5 py-4 transition-all text-sm"
-                  placeholder="nom@entreprise.com">
-              </div>
+          <!-- Form -->
+          <form (submit)="handleSubmit()" class="space-y-5">
+            <!-- Email Input -->
+            <div class="space-y-2">
+              <label class="text-[10px] font-black uppercase tracking-wider ml-1 text-muted">Email Entreprise</label>
+              <input 
+                type="email" 
+                [(ngModel)]="email" 
+                name="email" 
+                required
+                class="app-input rounded-xl px-5 py-3.5 w-full transition-all text-sm placeholder:text-muted/50"
+                placeholder="nom@entreprise.com">
             </div>
 
-            <div class="space-y-1.5">
-              <label class="text-[10px] font-black uppercase tracking-[0.2em] ml-1">Mot de passe</label>
-              <input type="password" [(ngModel)]="password" name="password" required
-                class="app-input rounded-2xl px-5 py-4 transition-all text-sm"
+            <!-- Password Input -->
+            <div class="space-y-2">
+              <label class="text-[10px] font-black uppercase tracking-wider ml-1 text-muted">Mot de passe</label>
+              <input 
+                type="password" 
+                [(ngModel)]="password" 
+                name="password" 
+                required
+                class="app-input rounded-xl px-5 py-3.5 w-full transition-all text-sm placeholder:text-muted/50"
                 placeholder="••••••••">
             </div>
 
-            <button type="submit" [disabled]="loading"
-              class="premium-btn primary w-full py-4 rounded-2xl disabled:opacity-50 bg-white text-black">
-              <span
-                class="relative z-10 flex items-center justify-center gap-2 uppercase tracking-widest text-xs font-black">
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              [disabled]="loading"
+              class="premium-btn w-full py-4 rounded-xl mt-6 disabled:opacity-50 transition-all bg-white black">
+              <span class="relative z-10 flex items-center justify-center gap-2 uppercase tracking-widest text-xs font-black text-black">
                 {{ loading ? 'Synchronisation...' : (isLogin ? 'Débloquer Dashboard' : 'Créer l\'accès Pro') }}
-                <svg *ngIf="!loading" class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none"
-                  stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3">
-                  </path>
+                <svg 
+                  *ngIf="!loading" 
+                  class="w-4 h-4 transition-transform" 
+                  fill="none"
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                 </svg>
               </span>
             </button>
           </form>
 
-          <div class="mt-8 pt-6 border-t border-white/5 text-center">
-            <p class="text-xs text-muted mb-2 font-medium">Besoin d'aide ? <a href="#"
-                class="text-muted-2 hover:opacity-100 transition-colors">Contactez le Support</a></p>
-            <button (click)="toggleMode()"
-              class="text-xs font-black text-carbon-primary uppercase tracking-widest hover:text-carbon-accent transition-colors">
+          <!-- Footer -->
+          <div class="mt-8 pt-6 border-t border-white/10">
+            <p class="text-xs text-muted text-center mb-3">
+              Besoin d'aide ? <a href="#" class="text-white/70 hover:text-white transition-colors font-medium">Contactez le Support</a>
+            </p>
+            <button 
+              (click)="toggleMode()"
+              class="text-xs font-black text-[#10b981] uppercase tracking-wider hover:text-[#34d399] transition-colors w-full py-2">
               {{ isLogin ? 'Créer un compte entreprise' : 'Se connecter à l\'espace Pro' }}
             </button>
           </div>

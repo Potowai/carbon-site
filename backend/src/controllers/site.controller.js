@@ -8,6 +8,22 @@ const FACTORS = {
   energy: 0.05  // par kWh (mix français)
 };
 
+/**
+ * Calcule l'impact carbone d'un site à partir de ses caractéristiques
+ */
+const calculateSiteCarbon = (site) => {
+  const surface = parseFloat(site.surface_m2) || 0;
+  const pSub = parseInt(site.parking_sous_sol) || 0;
+  
+  // Ratios d'estimation (en tonnes/m3) (Palier 1)
+  const estConcrete = (surface * 1.2) + (pSub * 15);
+  const estSteel = (surface * 0.1);
+  
+  // Impact en tonnes CO2eq
+  const totalKg = (estConcrete * 200) + (estSteel * 2500);
+  return totalKg / 1000;
+};
+
 const getAllSites = async (req, res, next) => {
   try {
     const { data: sites, error } = await supabase
@@ -16,7 +32,65 @@ const getAllSites = async (req, res, next) => {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
+
+    // S'assurer que chaque site a un total_carbon_tons (recalculer si manquant/zéro)
+    const processedSites = (sites || []).map(site => {
+      if (!site.total_carbon_tons || site.total_carbon_tons === 0) {
+        return {
+          ...site,
+          total_carbon_tons: calculateSiteCarbon(site)
+        };
+      }
+      return site;
+    });
+
+    res.json({ success: true, data: processedSites });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getMySites = async (req, res, next) => {
+  try {
+    const userId = req.auth?.userId;
+
+    const { data: sites, error } = await supabase
+      .from('sites')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
     res.json({ success: true, data: sites });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getSiteById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const { data: site, error } = await supabase
+      .from('sites')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ success: false, message: 'Site not found' });
+      }
+      throw error;
+    }
+
+    // Calculer les émissions si manquantes
+    const siteWithCarbon = {
+      ...site,
+      total_carbon_tons: site.total_carbon_tons || calculateSiteCarbon(site)
+    };
+
+    res.json({ success: true, data: siteWithCarbon });
   } catch (error) {
     next(error);
   }
@@ -38,20 +112,9 @@ const createSite = async (req, res, next) => {
     console.log('Body:', req.body);
 
     // Calcul d'estimation simplifié (Palier 1)
+    const totalTons = calculateSiteCarbon(req.body);
     const surface = parseFloat(surface_m2) || 0;
     const pSub = parseInt(parking_sous_sol) || 0;
-    
-    // Ratios d'estimation (en tonnes/m3)
-    const estConcrete = (surface * 1.2) + (pSub * 15); // Tons
-    const estSteel = (surface * 0.1); // Tons
-    
-    // Impact en Kg CO2eq
-    // Concrete: 200kg/m3 (approx 1 ton = 0.4m3 -> 80kg/ton?) 
-    // Let's keep it simple as per Palier 1
-    const totalKg = (estConcrete * 200) + (estSteel * 2500);
-    const totalTons = totalKg / 1000;
-
-    console.log('Estimation Results:', { estConcrete, estSteel, totalKg, totalTons });
 
     const { data: site, error } = await supabase
       .from('sites')
@@ -187,6 +250,17 @@ const getGlobalDashboard = async (req, res, next) => {
       ]
     };
 
+    // Nouveau: Répartition Construction vs Exploitation (Palier 2)
+    // Construction: Empreinte totale actuelle
+    // Exploitation: Estimation annuelle basée sur la surface (ex: 50 kg CO2/m2/an)
+    const est_exploitation = (total_surface * 50) / 1000; // tCO2e/an
+    const construction_vs_exploitation = {
+      data: [
+        { name: 'Construction (Phase une)', value: Math.round(total_footprint), percentage: 70 },
+        { name: 'Exploitation (Par an)', value: Math.round(est_exploitation), percentage: 30 }
+      ]
+    };
+
     // Données de tendance par mois (les 12 derniers mois)
     const monthlyTrend = {};
     const now = new Date();
@@ -221,6 +295,7 @@ const getGlobalDashboard = async (req, res, next) => {
       active_sites,
       avg_surface: Math.round(avg_surface),
       material_distribution,
+      construction_vs_exploitation,
       trend_data,
       currency: 'tCO2e',
       unit: 'kg/m²',
@@ -255,6 +330,8 @@ const getGlobalDashboard = async (req, res, next) => {
 
 module.exports = {
   getAllSites,
+  getMySites,
+  getSiteById,
   createSite,
   estimateCarbon,
   getGlobalDashboard

@@ -1,7 +1,8 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -14,12 +15,14 @@ import {
   LayoutDashboard, 
   Database, 
   LogOut, 
+  Search,
   Filter, 
   Calendar, 
   Download, 
   RefreshCw, 
   HardHat, 
-  ChevronLeft 
+  ChevronLeft,
+  List
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -27,7 +30,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(), 
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
@@ -40,12 +43,14 @@ export const appConfig: ApplicationConfig = {
       LayoutDashboard, 
       Database, 
       LogOut, 
+      Search,
       Filter, 
       Calendar, 
       Download, 
       RefreshCw, 
       HardHat, 
-      ChevronLeft 
+      ChevronLeft,
+      List
     }))
   ]
 };

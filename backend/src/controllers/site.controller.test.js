@@ -41,7 +41,10 @@ describe('site.controller', () => {
       expect(supabase.from).toHaveBeenCalledWith('sites');
       expect(select).toHaveBeenCalledWith('*');
       expect(order).toHaveBeenCalledWith('created_at', { ascending: false });
-      expect(res.json).toHaveBeenCalledWith({ success: true, data: sites });
+      expect(res.json).toHaveBeenCalledWith({
+        success: true,
+        data: [expect.objectContaining({ id: 1, nom: 'Site A', total_carbon_tons: expect.any(Number) })],
+      });
       expect(next).not.toHaveBeenCalled();
     });
 

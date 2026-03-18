@@ -1,0 +1,18 @@
+:host ::ng-deep {
+  /* Prevent ApexCharts from overflowing its parent container */
+  .apexcharts-canvas, 
+  .apexcharts-svg {
+    max-width: 100% !important;
+  }
+
+  /* Ensure the donut doesn't get clipped if the container is tight */
+  .apexcharts-datalabels-group {
+    display: none !important; /* Hide center labels if they cause issues, or refine */
+  }
+}
+
+.app-card {
+  overflow: hidden; /* Prevent internal content from spilling out during animations */
+  display: flex;
+  flex-direction: column;
+}

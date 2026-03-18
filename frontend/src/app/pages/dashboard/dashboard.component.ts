@@ -37,6 +37,7 @@ export type ChartOptions = {
   fill: ApexFill;
   labels: any;
   colors: string[];
+  responsive: any[];
 };
 
 @Component({
@@ -57,6 +58,8 @@ export class DashboardComponent implements OnInit {
   stats: any = null;
   loading = true;
   isMenuOpen = false;
+  sites: any[] = [];
+  loadingSites = true;
   
   // Filters
   selectedTimeRange = '30d'; // '7d', '30d', '1y'
@@ -65,6 +68,7 @@ export class DashboardComponent implements OnInit {
   // Chart Options
   public lineChartOptions!: Partial<ChartOptions>;
   public pieChartOptions!: Partial<ChartOptions>;
+  public typeChartOptions!: Partial<ChartOptions>;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -73,6 +77,7 @@ export class DashboardComponent implements OnInit {
   // Data for ngx-charts
   carbonTrend: any[] = [];
   materialDistribution: any[] = [];
+  constructionVsExploitation: any[] = [];
 
   colorScheme: any = {
     domain: ['#10b981', '#3b82f6', '#06b6d4', '#64748b']
@@ -90,6 +95,15 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.initChartOptions();
     this.loadDashboardData();
+    this.siteService.getMySites().subscribe({
+      next: (sites) => {
+        this.sites = Array.isArray(sites) ? sites : [];
+        this.loadingSites = false;
+      },
+      error: () => {
+        this.loadingSites = false;
+      }
+    });
   }
 
   initChartOptions() {
@@ -97,6 +111,7 @@ export class DashboardComponent implements OnInit {
       series: [],
       chart: {
         height: 350,
+        width: '100%',
         type: "area",
         toolbar: {
           show: true,
@@ -140,21 +155,26 @@ export class DashboardComponent implements OnInit {
       },
       tooltip: {
         theme: 'dark'
-      }
+      },
+      responsive: []
     };
 
     this.pieChartOptions = {
       series: [],
       chart: {
         type: "donut",
-        height: 350,
+        height: 250,
+        width: '100%',
         background: 'transparent',
-        foreColor: '#94a3b8'
+        foreColor: '#94a3b8',
+        sparkline: { enabled: false }
       },
       colors: ['#10b981', '#3b82f6', '#06b6d4', '#64748b', '#8b5cf6'],
       labels: [],
       legend: {
-        position: 'bottom'
+        position: 'bottom',
+        fontSize: '10px',
+        fontWeight: 600
       },
       plotOptions: {
         pie: {
@@ -166,8 +186,28 @@ export class DashboardComponent implements OnInit {
       stroke: {
         show: false
       },
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            height: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }],
       tooltip: {
         theme: 'dark'
+      }
+    };
+
+    this.typeChartOptions = {
+      ...this.pieChartOptions,
+      colors: ['#3b82f6', '#10b981'], // Blue for Construction, Green for Exploitation
+      chart: {
+        ...this.pieChartOptions.chart,
+        type: 'donut'
       }
     };
   }
@@ -302,6 +342,18 @@ export class DashboardComponent implements OnInit {
         this.materialDistribution = distRaw;
         this.pieChartOptions.series = distRaw.map((item: any) => parseFloat(item.value || 0));
         this.pieChartOptions.labels = distRaw.map((item: any) => item.name);
+
+        // Construction vs Exploitation (Palier 2)
+        let typeRaw = stats?.construction_vs_exploitation?.data || [];
+        if (typeRaw.length === 0) {
+          typeRaw = [
+            { name: 'Construction', value: (this.stats?.total_footprint || 0), percentage: 70 },
+            { name: 'Exploitation', value: (this.stats?.total_footprint || 0) * 0.4, percentage: 30 }
+          ];
+        }
+        this.constructionVsExploitation = typeRaw;
+        this.typeChartOptions.series = typeRaw.map((item: any) => parseFloat(item.value || 0));
+        this.typeChartOptions.labels = typeRaw.map((item: any) => item.name);
 
         // Trend: calculé à partir des sites + filtre 7/30/1y
         const trend = this.buildTrendFromSites(sites || [], this.selectedTimeRange);
