@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, catchError, first } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface AppConfig {
@@ -31,16 +31,18 @@ export class ConfigService {
           this.configSubject.next(response.data);
         }
       }),
+      // Map to extract just the data from the response
+      map((response) => response.data),
       catchError((error) => {
         console.error('Failed to load configuration from backend:', error);
-        // Return empty config on error - the user won't be able to use authentication
-        return of({
+        const emptyConfig: AppConfig = {
           supabaseUrl: '',
           supabaseKey: '',
           apiUrl: environment.apiUrl
-        } as AppConfig);
+        };
+        this.configSubject.next(emptyConfig);
+        return of(emptyConfig);
       }),
-      first(),
       tap((config) => {
         if (!config.supabaseUrl || !config.supabaseKey) {
           console.warn('Configuration is incomplete - Supabase credentials not available');

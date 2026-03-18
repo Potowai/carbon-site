@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SiteService } from '../../services/site.service';
 import { LucideAngularModule } from 'lucide-angular';
-import { NgApexchartsModule } from 'ng-apexcharts';
-import { ApexOptions } from 'apexcharts';
+import { NgApexchartsModule, ChartComponent } from 'ng-apexcharts';
+import { ApexOptions } from 'ng-apexcharts';
 
 type Site = {
   id: string | number;
@@ -32,10 +32,30 @@ export class SiteDetailComponent implements OnInit, OnDestroy {
   site: Site | null = null;
   private sub?: Subscription;
 
-  // Graphe options
-  parkingChartOptions: ApexOptions = {};
-  intensityChartOptions: ApexOptions = {};
-  carbonBreakdownOptions: ApexOptions = {};
+  // Graphe options - using ng-apexcharts types
+  parkingChartOptions: ApexOptions = {
+    chart: { type: 'pie' },
+    series: [],
+    labels: [],
+    colors: [],
+    legend: { position: 'bottom' },
+    responsive: []
+  };
+  intensityChartOptions: ApexOptions = {
+    chart: { type: 'radialBar' },
+    series: [],
+    labels: [],
+    colors: [],
+    plotOptions: { radialBar: { hollow: { size: '70%' } } }
+  };
+  carbonBreakdownOptions: ApexOptions = {
+    chart: { type: 'donut' },
+    series: [],
+    labels: [],
+    colors: [],
+    legend: { position: 'bottom' },
+    responsive: []
+  };
 
   constructor(private route: ActivatedRoute, private siteService: SiteService) {}
 

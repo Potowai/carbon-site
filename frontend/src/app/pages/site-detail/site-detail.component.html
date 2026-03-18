@@ -93,12 +93,12 @@
           </div>
           <div class="bg-gradient-to-r from-[#10b981]/5 to-[#34d399]/5 rounded-2xl p-6" *ngIf="parkingChartOptions.series">
             <apx-chart
-              [series]="parkingChartOptions.series"
-              [chart]="parkingChartOptions.chart"
-              [labels]="parkingChartOptions.labels"
-              [colors]="parkingChartOptions.colors"
-              [legend]="parkingChartOptions.legend"
-              [responsive]="parkingChartOptions.responsive">
+              [series]="parkingChartOptions.series!"
+              [chart]="parkingChartOptions.chart!"
+              [labels]="parkingChartOptions.labels!"
+              [colors]="parkingChartOptions.colors!"
+              [legend]="parkingChartOptions.legend!"
+              [responsive]="parkingChartOptions.responsive!">
             </apx-chart>
           </div>
         </div>
@@ -108,12 +108,12 @@
           <h3 class="text-sm font-black uppercase tracking-widest text-muted mb-6">Répartition de l'empreinte</h3>
           <div class="bg-gradient-to-r from-[#0ea5e9]/5 to-[#8b5cf6]/5 rounded-2xl p-6" *ngIf="carbonBreakdownOptions.series">
             <apx-chart
-              [series]="carbonBreakdownOptions.series"
-              [chart]="carbonBreakdownOptions.chart"
-              [labels]="carbonBreakdownOptions.labels"
-              [colors]="carbonBreakdownOptions.colors"
-              [legend]="carbonBreakdownOptions.legend"
-              [responsive]="carbonBreakdownOptions.responsive">
+              [series]="carbonBreakdownOptions.series!"
+              [chart]="carbonBreakdownOptions.chart!"
+              [labels]="carbonBreakdownOptions.labels!"
+              [colors]="carbonBreakdownOptions.colors!"
+              [legend]="carbonBreakdownOptions.legend!"
+              [responsive]="carbonBreakdownOptions.responsive!">
             </apx-chart>
           </div>
         </div>
@@ -136,11 +136,11 @@
           <!-- Intensité -->
           <div class="bg-gradient-to-r from-[#10b981]/5 to-[#34d399]/5 rounded-2xl p-6 mb-6" *ngIf="intensityChartOptions.series">
             <apx-chart
-              [series]="intensityChartOptions.series"
-              [chart]="intensityChartOptions.chart"
-              [labels]="intensityChartOptions.labels"
-              [colors]="intensityChartOptions.colors"
-              [plotOptions]="intensityChartOptions.plotOptions">
+              [series]="intensityChartOptions.series!"
+              [chart]="intensityChartOptions.chart!"
+              [labels]="intensityChartOptions.labels!"
+              [colors]="intensityChartOptions.colors!"
+              [plotOptions]="intensityChartOptions.plotOptions!">
             </apx-chart>
           </div>
 
