@@ -32,8 +32,8 @@ export class SiteDetailComponent implements OnInit, OnDestroy {
   site: Site | null = null;
   private sub?: Subscription;
 
-  // Graphe options - using ng-apexcharts types
-  parkingChartOptions: ApexOptions = {
+  // Graphe options - properly initialized
+  parkingChartOptions: ApexOptions & { series: number[]; labels: string[]; colors: string[] } = {
     chart: { type: 'pie' },
     series: [],
     labels: [],
@@ -41,7 +41,14 @@ export class SiteDetailComponent implements OnInit, OnDestroy {
     legend: { position: 'bottom' },
     responsive: []
   };
-  intensityChartOptions: ApexOptions = {
+  
+  intensityChartOptions: ApexOptions & { 
+    series: number[]; 
+    labels: string[]; 
+    colors: string[];
+    chart: any;
+    plotOptions: any;
+  } = {
     chart: { type: 'radialBar' },
     series: [],
     labels: [],

@@ -59,9 +59,22 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
+// CORS Configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:4200',      // Frontend dev
+    'http://127.0.0.1:4200',      // Frontend dev (alternative)
+    'https://carbon-site.onrender.com', // Frontend production
+    'http://localhost:3000'       // Allow requests to self
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 // Middlewares techniques
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(compression());
 app.use(express.json());

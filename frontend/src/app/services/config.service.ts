@@ -25,16 +25,38 @@ export class ConfigService {
   loadConfig(): Observable<AppConfig> {
     const configUrl = environment.configUrl || `${environment.apiUrl}/config`;
     
+    console.log('[ConfigService] Starting config load from:', configUrl);
+    console.log('[ConfigService] Environment:', { production: environment.production, apiUrl: environment.apiUrl });
+    
     return this.http.get<{ success: boolean; data: AppConfig }>(configUrl).pipe(
       tap((response) => {
-        if (response.success && response.data) {
-          this.configSubject.next(response.data);
-        }
+        console.log('[ConfigService] ✓ HTTP Request succeeded', response);
       }),
-      // Map to extract just the data from the response
-      map((response) => response.data),
+      map((response) => {
+        if (!response.success || !response.data) {
+          console.error('[ConfigService] ✗ Invalid response structure:', response);
+          throw new Error('Invalid response format from config endpoint');
+        }
+        console.log('[ConfigService] ✓ Response is valid, extracted config');
+        return response.data;
+      }),
+      tap((config) => {
+        console.log('[ConfigService] Config after mapping:', { 
+          supabaseUrl: config.supabaseUrl ? '✓ set' : '✗ missing',
+          supabaseKey: config.supabaseKey ? '✓ set' : '✗ missing',
+          apiUrl: config.apiUrl
+        });
+        
+        if (!config.supabaseUrl || !config.supabaseKey) {
+          console.error('[ConfigService] ✗ Missing Supabase credentials');
+          throw new Error('Missing Supabase credentials in config');
+        }
+        console.log('[ConfigService] ✓ Config loaded successfully with valid Supabase credentials');
+        this.configSubject.next(config);
+      }),
       catchError((error) => {
-        console.error('Failed to load configuration from backend:', error);
+        console.warn('[ConfigService] ⚠ Failed to load config from backend:', error?.message);
+        // Return neutral response - app can still load but won't have auth
         const emptyConfig: AppConfig = {
           supabaseUrl: '',
           supabaseKey: '',
@@ -42,11 +64,6 @@ export class ConfigService {
         };
         this.configSubject.next(emptyConfig);
         return of(emptyConfig);
-      }),
-      tap((config) => {
-        if (!config.supabaseUrl || !config.supabaseKey) {
-          console.warn('Configuration is incomplete - Supabase credentials not available');
-        }
       })
     );
   }

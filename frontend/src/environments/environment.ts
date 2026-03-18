@@ -1,7 +1,9 @@
 export const environment = {
   production: false,
-  supabaseUrl: 'https://zotwkhfknuinjhlpwmmw.supabase.co',
-  supabaseKey: 'sb_publishable_DWxerKiRDNAVVszrCoRkgw_m2UGYPd2',
-  apiUrl: 'http://localhost:3000/api',
-  configUrl: 'http://localhost:3000/api/config'
+  // Credentials are loaded from backend at runtime
+  supabaseUrl: '',
+  supabaseKey: '',
+  // Always use deployed backend
+  apiUrl: 'https://carbon-site-back.onrender.com/api',
+  configUrl: 'https://carbon-site-back.onrender.com/api/config'
 };

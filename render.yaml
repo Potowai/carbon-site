@@ -1,0 +1,17 @@
+# Render.com configuration for deployment optimizations
+# Place in root of project or in frontend directory
+
+services:
+  - type: web
+    name: carbonsite-frontend
+    runtime: node
+    region: oregon
+    env: node
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=512"
+    buildCommand: "cd frontend && npm install && npm run build"
+    startCommand: "cd frontend && npm start"

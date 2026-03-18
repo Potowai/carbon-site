@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ConfigService } from '../../services/config.service';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -12,12 +13,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   isLogin = true;
   email = '';
   password = '';
   loading = false;
   isMenuOpen = false;
+  configError = false;
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -25,6 +27,7 @@ export class HomeComponent {
 
   constructor(
     private auth: AuthService, 
+    private configService: ConfigService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
@@ -33,14 +36,59 @@ export class HomeComponent {
     });
   }
 
+  ngOnInit() {
+    // Config is now guaranteed to be loaded via APP_INITIALIZER
+    const config = this.configService.getConfig();
+    console.log('[HomeComponent] ngOnInit - Config status:', {
+      isLoaded: config !== null,
+      hasUrl: config?.supabaseUrl ? '✓' : '✗',
+      hasKey: config?.supabaseKey ? '✓' : '✗'
+    });
+    
+    if (!config || !config.supabaseUrl || !config.supabaseKey) {
+      console.warn('[HomeComponent] ✗ Configuration still not available - this should not happen');
+      this.configError = true;
+      this.snackBar.open(
+        'Configuration error: Unable to load authentication service. Please refresh the page.',
+        'OK',
+        { duration: 0, panelClass: ['error-snackbar'] }
+      );
+    } else {
+      console.log('[HomeComponent] ✓ Configuration is valid and ready');
+    }
+  }
+
   async handleSubmit() {
+    console.log('[HomeComponent] Login attempt:', { isLogin: this.isLogin, email: this.email });
+    
+    if (this.configError) {
+      console.warn('[HomeComponent] Config error - blocking login');
+      this.snackBar.open('Configuration not ready. Please refresh the page.', 'OK', { duration: 3000 });
+      return;
+    }
+
     this.loading = true;
+    console.log('[HomeComponent] Starting authentication...');
+    
     try {
+      const method = this.isLogin ? 'signIn' : 'signUp';
+      console.log(`[HomeComponent] Calling auth.${method}(${this.email})`);
+      
       const { data, error } = this.isLogin 
         ? await this.auth.signIn(this.email, this.password)
         : await this.auth.signUp(this.email, this.password);
       
-      if (error) throw error;
+      console.log(`[HomeComponent] auth.${method} response:`, { 
+        hasData: !!data,
+        error: error?.message || 'none'
+      });
+      
+      if (error) {
+        console.error('[HomeComponent] Auth error:', error);
+        throw error;
+      }
+
+      console.log('[HomeComponent] ✓ Authentication successful');
 
       if (!this.isLogin) {
         this.snackBar.open(
@@ -51,13 +99,20 @@ export class HomeComponent {
         this.isLogin = true;
       }
     } catch (e: any) {
-      const message = e.message.includes('Email not confirmed') 
+      console.error('[HomeComponent] ✗ Authentication failed:', {
+        message: e.message,
+        code: e.code,
+        status: e.status
+      });
+      
+      const message = e.message?.includes('Email not confirmed') 
         ? 'Veuillez valider votre adresse email avant de vous connecter.'
-        : e.message;
+        : e.message || 'Une erreur s\'est produite lors de l\'authentification.';
       
       this.snackBar.open(message, 'Fermer', { duration: 5000, panelClass: ['error-snackbar'] });
     } finally {
       this.loading = false;
+      console.log('[HomeComponent] Authentication attempt completed');
     }
   }
 
