@@ -562,18 +562,6 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    // Le token sera récupéré depuis les variables d'environnement côté backend
-    // ou configuré globalement dans l'application
-    const token = (window as any).ENV?.OPENROUTER_API_KEY || '';
-    
-    if (!token) {
-      this.snackBar.open('Token API non configuré. Veuillez contacter l\'administrateur.', 'Fermer', { 
-        duration: 5000,
-        panelClass: ['error-snackbar']
-      });
-      return;
-    }
-
     this.aiLoading = true;
     this.aiResponse = '';
 

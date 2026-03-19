@@ -29,57 +29,35 @@ export interface AIExplanationResponse {
   providedIn: 'root'
 })
 export class AiExplanationService {
-  private readonly API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-  private readonly DEFAULT_MODEL = 'google/gemma-2-9b-it:free';
+  private readonly API_URL = `${environment.apiUrl}/ai/explain-dashboard`;
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Expliquer les données du dashboard avec l'IA via OpenRouter (direct)
-   * @param question La question de l'utilisateur
-   * @param context Les données du dashboard
+   * Explique les données du dashboard via le backend (proxy vers OpenRouter)
    */
   explainDashboardData(
     question: string,
     context: DashboardContext
   ): Observable<AIExplanationResponse> {
-    const apiToken = environment.openRouterApiKey;
-    
-    if (!apiToken) {
-      return throwError(() => new Error('Token API non configuré. Ajoutez OPENROUTER_API_KEY dans .env.local'));
-    }
-
-    const systemPrompt = this.buildSystemPrompt(context);
-
     const request = {
-      model: this.DEFAULT_MODEL,
-      messages: [
-        { role: 'system' as const, content: systemPrompt },
-        { role: 'user' as const, content: question }
-      ],
-      temperature: 0.7,
-      max_tokens: 2000,
-      top_p: 1
+      question,
+      context
     };
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiToken}`,
-      'HTTP-Referer': window.location.origin,
-      'X-Title': 'CarbonSite Pro Dashboard AI'
-    });
-
-    return this.http.post<any>(this.API_URL, request, { headers }).pipe(
+    return this.http.post<any>(this.API_URL, request).pipe(
       catchError(error => {
-        console.error('Erreur OpenRouter:', error);
+        console.error('Erreur AI Explanation:', error);
         let errorMessage = 'Erreur lors de la communication avec l\'IA';
         
         if (error.status === 401) {
-          errorMessage = 'Token API OpenRouter invalide. Vérifiez votre token dans .env.local';
+          errorMessage = 'Token API OpenRouter non configuré sur le serveur. Contactez l\'administrateur.';
         } else if (error.status === 429) {
           errorMessage = 'Limite de requêtes atteinte. Veuillez réessayer plus tard.';
         } else if (error.status === 0) {
           errorMessage = 'Erreur réseau. Vérifiez votre connexion internet.';
+        } else if (error.error?.message) {
+          errorMessage = error.error.message;
         }
         
         return throwError(() => new Error(errorMessage));
@@ -88,51 +66,11 @@ export class AiExplanationService {
   }
 
   /**
-   * Construit le prompt système avec le contexte du dashboard
-   */
-  private buildSystemPrompt(context: DashboardContext): string {
-    const materialSummary = context.material_distribution
-      ?.map((m) => `- ${m?.name || 'Inconnu'}: ${m?.value || 0} ${context.currency || 'tCO2e'}`)
-      .join('\n') || 'Aucune donnée disponible';
-
-    const trendSummary = context.trend_data
-      ?.slice(-3)
-      .map((t) => `- ${t?.month || t?.name || 'Date'}: ${t?.value || 0} ${context.currency || 'tCO2e'}`)
-      .join('\n') || 'Aucune donnée disponible';
-
-    return `Tu es un assistant expert en analyse carbone et en construction BTP. Tu expliques les données de dashboard de manière claire, pédagogique et accessible.
-
-CONTEXTE DU DASHBOARD:
-Voici les données actuelles du dashboard CarbonSite Pro:
-
-📊 INDICATEURS CLÉS:
-- Empreinte carbone totale: ${context.total_footprint || 0} ${context.currency || 'tCO2e'}
-- Intensité carbone: ${context.carbon_intensity || 0} ${context.unit || 'kg/m²'}
-- Score RE2020: ${context.global_score || 0}/100
-- Nombre de sites actifs: ${context.active_sites || 0}
-- Surface moyenne: ${context.avg_surface || 0} m²
-
-🏗️ RÉPARTITION DES MATÉRIAUX:
-${materialSummary}
-
-📈 TENDANCE RÉCENTE (3 derniers points):
-${trendSummary}
-
-INSTRUCTIONS:
-1. Explique ce que signifient ces données de manière simple et professionnelle
-2. Utilise des analogies si nécessaire pour faciliter la compréhension
-3. Donne des conseils actionnables basés sur les données
-4. Si des valeurs semblent anormales ou préoccupantes, mentionne-le
-5. Réponds en français de manière concise mais complète (max 500 mots)
-6. Contextualise les chiffres (bons/mauvais par rapport aux standards RE2020)
-
-L'utilisateur va te poser des questions sur ces données. Réponds en t'appuyant sur le contexte fourni.`;
-  }
-
-  /**
-   * Vérifie si le token API est configuré
+   * Vérifie si le service IA est disponible (token configuré côté backend)
    */
   isTokenConfigured(): boolean {
-    return !!environment.openRouterApiKey && environment.openRouterApiKey.length > 20;
+    // Le token est géré côté backend, on considère toujours que c'est configuré
+    // L'erreur 401 sera gérée au moment de l'appel si nécessaire
+    return true;
   }
 }

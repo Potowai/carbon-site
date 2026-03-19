@@ -11,9 +11,9 @@ export const environment = {
   // Credentials are loaded from backend at runtime
   supabaseUrl: '',
   supabaseKey: '',
-  // Always use deployed backend
-  apiUrl: 'https://carbon-site-back.onrender.com/api',
-  configUrl: 'https://carbon-site-back.onrender.com/api/config',
+  // Use local backend for development
+  apiUrl: 'http://localhost:3000/api',
+  configUrl: 'http://localhost:3000/api/config',
   // OpenRouter API Key - loaded from backend at runtime, never commit secrets
   openRouterApiKey: ''
 };
