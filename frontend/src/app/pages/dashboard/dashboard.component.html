@@ -94,7 +94,7 @@
       <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Évolution des Émissions <span
           class="text-gray-500 text-sm ml-2 font-medium">(tCO₂e / mois)</span></h3>
       <div class="h-[300px]">
-        <ngx-charts-area-chart [scheme]="colorScheme" [results]="carbonTrend" [gradient]="true" [xAxis]="true"
+        <ngx-charts-area-chart *ngIf="hasValidCarbonTrend; else emptyTrendState" [scheme]="colorScheme" [results]="carbonTrend" [gradient]="true" [xAxis]="true"
           [yAxis]="true" [legend]="false" [showXAxisLabel]="false" [showYAxisLabel]="false" [autoScale]="true"
           [animations]="true">
         </ngx-charts-area-chart>
@@ -105,7 +105,7 @@
     <div class="bg-[#161b27]/80 p-8 rounded-[2.5rem] border border-white/5 h-[450px]">
       <h3 class="text-lg font-black mb-10 tracking-tight uppercase">Répartition Matériaux</h3>
       <div class="h-[300px] flex items-center justify-center">
-        <ngx-charts-pie-chart [scheme]="colorScheme" [results]="materialDistribution" [gradient]="false" [legend]="true"
+        <ngx-charts-pie-chart *ngIf="hasValidMaterialDistribution; else emptyDistributionState" [scheme]="colorScheme" [results]="materialDistribution" [gradient]="false" [legend]="true"
           [legendTitle]="''" [labels]="false" [doughnut]="true" [animations]="true">
         </ngx-charts-pie-chart>
       </div>
@@ -117,5 +117,17 @@
   <div class="min-h-screen bg-[#0b0f19] flex flex-col items-center justify-center gap-6">
     <div class="w-16 h-16 border-4 border-[#10b981]/20 border-t-[#10b981] rounded-full animate-spin"></div>
     <p class="text-[#10b981] font-black tracking-widest uppercase text-xs animate-pulse">Chargement des données...</p>
+  </div>
+</ng-template>
+
+<ng-template #emptyTrendState>
+  <div class="h-full flex items-center justify-center text-gray-500 text-sm">
+    Donnees d'evolution indisponibles.
+  </div>
+</ng-template>
+
+<ng-template #emptyDistributionState>
+  <div class="h-full flex items-center justify-center text-gray-500 text-sm">
+    Donnees de repartition indisponibles.
   </div>
 </ng-template>
