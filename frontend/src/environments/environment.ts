@@ -14,7 +14,6 @@ export const environment = {
   // Always use deployed backend
   apiUrl: 'https://carbon-site-back.onrender.com/api',
   configUrl: 'https://carbon-site-back.onrender.com/api/config',
-  // OpenRouter API Key - charger depuis .env.local avec: OPENROUTER_API_KEY=votre_token
-  // Le token ne doit JAMAIS être commité !
-  openRouterApiKey: process.env['OPENROUTER_API_KEY'] || ''
+  // OpenRouter API Key - loaded from backend at runtime, never commit secrets
+  openRouterApiKey: ''
 };
