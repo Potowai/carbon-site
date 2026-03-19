@@ -1,5 +1,6 @@
 const express = require('express');
 const { z } = require('zod');
+const aiConfig = require('../config/ai.config');
 
 // Schéma de validation pour la requête d'explication IA
 const explainDashboardSchema = z.object({
@@ -68,8 +69,8 @@ const explainDashboard = async (req, res, next) => {
     // Validation de la requête
     const { question, context } = explainDashboardSchema.parse(req.body);
 
-    // Récupération du token depuis les variables d'environnement
-    const apiToken = process.env.OPENROUTER_API_KEY;
+    // Récupération du token depuis les variables d'environnement ou config locale
+    const apiToken = process.env.OPENROUTER_API_KEY || aiConfig.OPENROUTER_API_KEY;
     
     if (!apiToken) {
       return res.status(401).json({
@@ -92,7 +93,7 @@ const explainDashboard = async (req, res, next) => {
         'X-Title': 'CarbonSite Pro Dashboard AI'
       },
       body: JSON.stringify({
-        model: 'google/gemma-2-9b-it:free',
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: question }
@@ -145,7 +146,7 @@ const explainDashboard = async (req, res, next) => {
       success: true,
       data: {
         response: data.choices[0].message.content,
-        model: data.model || 'google/gemma-2-9b-it:free',
+        model: data.model || 'meta-llama/llama-3.3-70b-instruct:free',
         usage: data.usage || {
           prompt_tokens: 0,
           completion_tokens: 0,

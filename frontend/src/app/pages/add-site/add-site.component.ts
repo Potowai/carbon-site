@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -19,7 +20,8 @@ import { SitePayload, SiteRecommendationPayload, SiteService } from '../../servi
     MatStepperModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule
   ],
   templateUrl: './add-site.component.html',
   styleUrl: './add-site.component.scss',
@@ -31,6 +33,24 @@ export class AddSiteComponent {
   isSubmitting = false;
   isLoadingRecommendations = false;
   recommendationData: any | null = null;
+
+  // Liste des matériaux prédéfinis courants en construction BTP
+  materiauxSuggestions = [
+    { value: 'beton', label: 'Béton', icon: '🏗️' },
+    { value: 'acier', label: 'Acier', icon: '🔩' },
+    { value: 'bois', label: 'Bois', icon: '🪵' },
+    { value: 'verre', label: 'Verre', icon: '🪟' },
+    { value: 'aluminium', label: 'Aluminium', icon: '🔧' },
+    { value: 'ciment', label: 'Ciment', icon: '🏭' },
+    { value: 'briques', label: 'Briques', icon: '🧱' },
+    { value: 'isolants', label: 'Isolants', icon: '🧊' },
+    { value: 'ceramique', label: 'Céramique', icon: '🏺' },
+    { value: 'pvc', label: 'Plastiques/PVC', icon: '🧴' },
+    { value: 'cuivre', label: 'Cuivre', icon: '🥉' },
+    { value: 'pierre', label: 'Pierre naturelle', icon: '⛰️' },
+    { value: 'beton_arme', label: 'Béton armé', icon: '🏗️' },
+    { value: 'bois_massif', label: 'Bois massif', icon: '🌲' }
+  ];
 
   constructor(
     private formBuilder: FormBuilder,

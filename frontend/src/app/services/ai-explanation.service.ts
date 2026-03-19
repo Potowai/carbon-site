@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, throwError, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface DashboardContext {
@@ -46,6 +46,7 @@ export class AiExplanationService {
     };
 
     return this.http.post<any>(this.API_URL, request).pipe(
+      map(response => response.data),
       catchError(error => {
         console.error('Erreur AI Explanation:', error);
         let errorMessage = 'Erreur lors de la communication avec l\'IA';

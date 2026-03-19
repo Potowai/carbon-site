@@ -6,6 +6,7 @@ const compression = require('compression');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 require('dotenv').config();
+require('dotenv').config({ path: '.env.local' });
 
 const siteRoutes = require('./routes/site.routes');
 const configRoutes = require('./routes/config.routes');

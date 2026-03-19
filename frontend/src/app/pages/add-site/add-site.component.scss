@@ -65,6 +65,45 @@
       color: var(--app-text) !important;
       font-weight: 500;
     }
+
+    /* Mat Select Customization */
+    .mat-mdc-select-value {
+      color: white !important;
+    }
+
+    .mat-mdc-select-placeholder {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .mat-mdc-select-arrow {
+      color: white !important;
+    }
+  }
+
+  /* Mat Select Panel (Dropdown) */
+  .mat-mdc-select-panel {
+    background: rgba(11, 15, 25, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+
+    .mat-mdc-option {
+      color: white !important;
+      background: transparent !important;
+
+      &:hover {
+        background: rgba(16, 185, 129, 0.2) !important;
+      }
+
+      &.mdc-list-item--selected {
+        background: rgba(16, 185, 129, 0.3) !important;
+        color: #10b981 !important;
+      }
+    }
+
+    .mat-mdc-optgroup-label {
+      color: rgba(255, 255, 255, 0.7) !important;
+      font-weight: 600 !important;
+    }
   }
 
   /* Hint and Error */
