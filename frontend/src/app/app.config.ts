@@ -24,7 +24,10 @@ import {
   HardHat, 
   ChevronLeft,
   List,
-  FileText
+  FileText,
+  Sparkles,
+  ArrowLeft,
+  X
 } from 'lucide-angular';
 
 /**
@@ -75,7 +78,11 @@ export const appConfig: ApplicationConfig = {
       RefreshCw, 
       HardHat, 
       ChevronLeft,
-      List
+      List,
+      FileText,
+      Sparkles,
+      ArrowLeft,
+      X
     }))
   ]
 };

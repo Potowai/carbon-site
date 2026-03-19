@@ -155,6 +155,18 @@ router.post('/estimate', siteController.estimateCarbon);
 
 /**
  * @swagger
+ * /api/sites/recommendations:
+ *   post:
+ *     summary: Obtenir des recommandations carbone via ADEME Base Carbone
+ *     tags: [Estimation]
+ *     responses:
+ *       200:
+ *         description: Recommandations générées
+ */
+router.post('/recommendations', siteController.getAdemeRecommendations);
+
+/**
+ * @swagger
  * /api/sites/global-dashboard:
  *   get:
  *     summary: Récupérer les statistiques globales du dashboard

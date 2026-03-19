@@ -116,10 +116,74 @@
     </div>
 
     <div class="flex items-center gap-4 w-full md:w-auto">
-      <button class="flex-1 md:flex-none flex items-center justify-center gap-2 btn-ghost px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
-        <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
-        Export PDF
-      </button>
+      <ai-assistant-button 
+        (openAiPanel)="onAiPanelOpen()"
+        (closeAiPanel)="onAiPanelClose()"
+        (backToDashboard)="onAiPanelClose()"
+        ariaLabel="Ouvrir l'assistant IA pour expliquer les données du dashboard">
+        Posez une question à l'assistant
+        <!-- AI Content Slot -->
+        <div aiContent class="ai-content-wrapper">
+          <!-- Question Input -->
+          <div class="mb-6">
+            <label class="block text-xs font-black uppercase tracking-wider text-muted mb-3">Votre question</label>
+            <textarea 
+              [(ngModel)]="aiQuestion"
+              placeholder="Explique-moi ce que veulent dire les données tCO2e..."
+              rows="3"
+              class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--app-accent)]/50 transition-colors resize-none"></textarea>
+            <div class="flex justify-between items-center mt-3">
+              <button 
+                *ngIf="aiResponse"
+                (click)="clearAIResponse()"
+                class="text-xs text-muted hover:text-white transition-colors underline">
+                Effacer
+              </button>
+              <button 
+                (click)="askAI()"
+                [disabled]="aiLoading || !aiQuestion.trim()"
+                class="ml-auto px-6 py-3 bg-[var(--app-accent)] hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-black font-black uppercase tracking-wider text-xs rounded-xl transition-all flex items-center gap-2">
+                <lucide-icon *ngIf="!aiLoading" name="send" class="w-4 h-4"></lucide-icon>
+                <svg *ngIf="aiLoading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {{ aiLoading ? 'Analyse...' : 'Demander' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Suggested Questions -->
+          <div *ngIf="!aiResponse && !aiLoading" class="mb-6">
+            <p class="text-xs font-black uppercase tracking-wider text-muted mb-3">Questions suggérées</p>
+            <div class="flex flex-col gap-2">
+              <button 
+                *ngFor="let question of getSuggestedQuestions()"
+                (click)="useSuggestedQuestion(question)"
+                class="text-left p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[var(--app-accent)]/30 transition-all text-sm text-muted hover:text-white">
+                {{ question }}
+              </button>
+            </div>
+          </div>
+
+          <!-- AI Response -->
+          <div *ngIf="aiResponse" class="ai-response">
+            <div class="p-4 rounded-2xl bg-[var(--app-accent)]/10 border border-[var(--app-accent)]/20">
+              <div class="flex items-center gap-2 mb-3">
+                <lucide-icon name="sparkles" class="w-4 h-4 text-[var(--app-accent)]"></lucide-icon>
+                <span class="text-xs font-black uppercase tracking-wider text-[var(--app-accent)]">Réponse de l'IA</span>
+              </div>
+              <div class="text-sm leading-relaxed whitespace-pre-wrap text-white/90">{{ aiResponse }}</div>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="aiLoading && !aiResponse" class="flex flex-col items-center justify-center py-12">
+            <div class="w-12 h-12 border-3 border-[var(--app-accent)]/20 border-t-[var(--app-accent)] rounded-full animate-spin mb-4"></div>
+            <p class="text-sm text-muted animate-pulse">L'IA analyse vos données...</p>
+          </div>
+        </div>
+      </ai-assistant-button>
       <button (click)="loadDashboardData()" class="p-3 bg-accent rounded-xl shadow-lg hover:rotate-180 transition-all duration-500">
         <lucide-icon name="refresh-cw" class="w-5 h-5"></lucide-icon>
       </button>
@@ -188,7 +252,7 @@
       </div>
       <div class="h-[350px]">
         <apx-chart
-          *ngIf="lineChartOptions.series && lineChartOptions.series.length > 0; else noTrend"
+          *ngIf="lineChartOptions.series && lineChartOptions.series.length > 0; else emptyTrendState"
           [series]="lineChartOptions.series!"
           [chart]="lineChartOptions.chart!"
           [xaxis]="lineChartOptions.xaxis!"
@@ -212,7 +276,7 @@
         <h3 class="text-lg font-black mb-8 tracking-tight uppercase">Répartition Matériaux</h3>
         <div class="h-[250px]">
           <apx-chart
-            *ngIf="pieChartOptions.series && pieChartOptions.series.length > 0; else noDist"
+            *ngIf="pieChartOptions.series && pieChartOptions.series.length > 0; else emptyDistributionState"
             [series]="pieChartOptions.series!"
             [chart]="pieChartOptions.chart!"
             [labels]="pieChartOptions.labels!"
@@ -302,5 +366,17 @@
   <div class="min-h-screen app-bg flex flex-col items-center justify-center gap-6">
     <div class="w-16 h-16 border-4 rounded-full animate-spin" style="border-color: color-mix(in srgb, var(--app-accent) 20%, transparent); border-top-color: var(--app-accent)"></div>
     <p class="font-black tracking-widest uppercase text-xs animate-pulse" style="color: var(--app-accent)">Chargement des données...</p>
+  </div>
+</ng-template>
+
+<ng-template #emptyTrendState>
+  <div class="h-full flex items-center justify-center text-gray-500 text-sm">
+    Donnees d'evolution indisponibles.
+  </div>
+</ng-template>
+
+<ng-template #emptyDistributionState>
+  <div class="h-full flex items-center justify-center text-gray-500 text-sm">
+    Donnees de repartition indisponibles.
   </div>
 </ng-template>

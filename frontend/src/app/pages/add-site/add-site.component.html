@@ -1,105 +1,76 @@
-<div class="min-h-screen app-bg p-6 lg:p-10 font-['Inter']">
-  <!-- Top Bar -->
-  <header class="flex flex-col sm:flex-row justify-between items-center mb-8 lg:mb-12 app-panel p-4 rounded-3xl shadow-2xl max-w-5xl mx-auto gap-6 sm:gap-0">
-    <div class="flex items-center gap-4 w-full sm:w-auto">
-      <button routerLink="/dashboard" class="w-10 h-10 btn-ghost rounded-xl flex items-center justify-center transition-all group" aria-label="Retour au Dashboard">
-        <svg class="w-5 h-5 text-muted group-hover:text-[var(--app-accent)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+<div class="min-h-screen bg-carbon-bg text-white p-6 lg:p-10 font-['Inter']">
+  <header class="flex justify-between items-center mb-12 bg-white/[0.03] backdrop-blur-md p-4 rounded-3xl border border-white/5 shadow-2xl max-w-5xl mx-auto">
+    <div class="flex items-center gap-4">
+      <button routerLink="/dashboard" class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all group border border-white/10">
+        <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
       </button>
-      <h1 class="text-lg lg:text-xl font-black tracking-tight uppercase">
-        Nouveau <span class="text-[var(--app-accent)]">Chantier</span>
+      <h1 class="text-xl font-black tracking-tight uppercase">
+        Nouveau <span class="text-[#10b981]">Site</span>
       </h1>
     </div>
 
-    <div class="flex items-center gap-3 app-panel px-4 py-2 rounded-full">
-      <div class="w-2 h-2 rounded-full bg-[var(--app-accent)] animate-pulse" aria-hidden="true"></div>
-      <span class="text-[10px] font-black uppercase tracking-widest text-muted">Calculateur RE2020</span>
-    </div>
-
-    <!-- Burger Toggle (Mobile Only) -->
-    <div class="sm:hidden absolute top-4 right-4">
-      <button (click)="toggleMenu()" class="p-2 btn-ghost rounded-xl" [aria-label]="isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'" [aria-expanded]="isMenuOpen">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-          <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="w-full sm:hidden flex-col gap-4 animate-slide-down" [class.flex]="isMenuOpen" [class.hidden]="!isMenuOpen">
-      <div class="flex flex-col gap-3 p-4 app-panel rounded-2xl mt-4">
-        <a routerLink="/dashboard" (click)="isMenuOpen = false" class="w-full btn-outline py-4 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-          Dashboard
-        </a>
-        <a routerLink="/sites" (click)="isMenuOpen = false" class="w-full btn-outline py-4 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-          Liste des Sites
-        </a>
-      </div>
+    <div class="hidden md:flex items-center gap-3 bg-black/40 px-4 py-2 rounded-full border border-white/10">
+      <div class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></div>
+      <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Synchronisation API</span>
     </div>
   </header>
 
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-5xl mx-auto">
     <div class="glass-card rounded-[2.5rem] p-4 lg:p-10">
-      
-      <!-- Stepper Customisé -->
+
       <mat-stepper [linear]="true" #stepper class="bg-transparent">
-        
-        <!-- ÉTAPE 1 : Général -->
+
         <mat-step [stepControl]="generalFormGroup">
           <ng-template matStepLabel>Conception</ng-template>
-          
+
           <form [formGroup]="generalFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
-              <h2 class="text-2xl font-black tracking-tight">Identité du projet</h2>
-              <p class="text-muted text-sm">Définissez les bases de votre évaluation carbone.</p>
+              <h2 class="text-2xl font-black tracking-tight">Identite du projet</h2>
+              <p class="text-gray-500 text-sm">Les champs de la table <code>sites</code> sont regroupes ici.</p>
             </div>
 
             <div class="grid grid-cols-1 gap-6">
               <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Nom de l'opération</mat-label>
+                <mat-label>Nom de l'operation</mat-label>
                 <input matInput formControlName="nom" placeholder="Ex: Campus Via Silva" required>
               </mat-form-field>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>Surface Plancher (m²)</mat-label>
-                  <input matInput type="number" formControlName="surface_m2" placeholder="Ex: 5000">
+                  <mat-label>Surface plancher (m2)</mat-label>
+                  <input matInput type="number" formControlName="surface_m2" placeholder="5000">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>Capacité (Employés)</mat-label>
-                  <input matInput type="number" formControlName="nb_employes" placeholder="Ex: 150">
+                  <mat-label>Nombre d'employes</mat-label>
+                  <input matInput type="number" formControlName="nb_employes" placeholder="150">
                 </mat-form-field>
               </div>
             </div>
 
             <div class="flex justify-end pt-4">
-              <button matStepperNext class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
+              <button matStepperNext type="button" class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
                 Continuer
               </button>
             </div>
           </form>
         </mat-step>
 
-        <!-- ÉTAPE 2 : Infrastructures -->
         <mat-step [stepControl]="infraFormGroup">
           <ng-template matStepLabel>Infrastructures</ng-template>
-          
+
           <form [formGroup]="infraFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
-              <h2 class="text-2xl font-black tracking-tight">Ouvrages & Parkings</h2>
-              <p class="text-muted text-sm">Les infrastructures souterraines sont les plus impactantes.</p>
+              <h2 class="text-2xl font-black tracking-tight">Ouvrages et capacite</h2>
+              <p class="text-gray-500 text-sm">On mappe ici le reste des colonnes de la table <code>sites</code>.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Places sous-sol</mat-label>
                 <input matInput type="number" formControlName="parking_sous_sol">
-                <mat-hint>Structure lourde</mat-hint>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="w-full">
@@ -108,58 +79,151 @@
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Places aériennes</mat-label>
+                <mat-label>Places aeriennes</mat-label>
                 <input matInput type="number" formControlName="parking_aerien">
-                <mat-hint>Impact réduit</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Postes de travail</mat-label>
+                <input matInput type="number" formControlName="postes_travail">
               </mat-form-field>
             </div>
 
             <div class="flex justify-between items-center pt-4">
-              <button matStepperPrevious class="text-muted hover:opacity-100 font-black uppercase text-xs tracking-widest transition-colors">
+              <button matStepperPrevious type="button" class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
                 Retour
               </button>
-              <button matStepperNext class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
+              <button matStepperNext type="button" class="premium-btn primary px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest">
                 Suivant
               </button>
             </div>
           </form>
         </mat-step>
 
-        <!-- ÉTAPE 3 : Énergie -->
-        <mat-step [stepControl]="energyFormGroup">
-          <ng-template matStepLabel>Exploitation</ng-template>
-          
-          <form [formGroup]="energyFormGroup" class="flex flex-col gap-8 mt-10">
+        <mat-step [stepControl]="detailsFormGroup">
+          <ng-template matStepLabel>Donnees</ng-template>
+
+          <form [formGroup]="detailsFormGroup" class="flex flex-col gap-8 mt-10">
             <div class="space-y-2">
-              <h2 class="text-2xl font-black tracking-tight">Performance Énergétique</h2>
-              <p class="text-muted text-sm">Consommations prévisionnelles annuelles.</p>
+              <h2 class="text-2xl font-black tracking-tight">Consommations et materiaux</h2>
+              <p class="text-gray-500 text-sm">Chaque bloc ajoute une ligne dans <code>consommations</code> ou <code>materiaux</code>.</p>
             </div>
 
-            <div class="grid grid-cols-1 gap-6">
-              <mat-form-field appearance="outline" class="w-full lg:w-1/2">
-                <mat-label>Consommation (MWh/an)</mat-label>
-                <input matInput type="number" formControlName="energie_mwh" placeholder="Ex: 800">
-              </mat-form-field>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              <section class="section-card">
+                <div class="section-card__header">
+                  <div>
+                    <h3 class="section-card__title">Consommations</h3>
+                    <p class="section-card__subtitle">Une annee par ligne.</p>
+                  </div>
+                  <button type="button" (click)="addConsommation()" class="mini-action-btn">Ajouter</button>
+                </div>
 
-              <div class="bg-[#10b981]/10 border border-[#10b981]/20 p-6 rounded-3xl flex items-start gap-5">
-                <div class="w-12 h-12 bg-[#10b981] rounded-2xl flex items-center justify-center shrink-0 shadow-glow">
-                  <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                <div formArrayName="consommations" class="space-y-4">
+                  <div *ngFor="let group of consommations.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i" class="entry-card">
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-4 items-start">
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Annee</mat-label>
+                        <input matInput type="number" formControlName="annee" placeholder="2026">
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Energie (MWh)</mat-label>
+                        <input matInput type="number" formControlName="energie_mwh" placeholder="800">
+                      </mat-form-field>
+
+                      <button type="button" (click)="removeConsommation(i)" class="remove-btn" [disabled]="consommations.length === 1">
+                        Supprimer
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 class="font-black text-[#10b981] uppercase text-xs tracking-widest mb-1">Algorithme d'IA actif</h4>
-                  <p class="text-muted-2 text-sm leading-relaxed">Notre modèle CarbonCompute™ estimera automatiquement le tonnage des matériaux (béton, acier, verre) en fonction de vos saisies.</p>
+              </section>
+
+              <section class="section-card">
+                <div class="section-card__header">
+                  <div>
+                    <h3 class="section-card__title">Materiaux</h3>
+                    <p class="section-card__subtitle">Une famille de materiau par ligne.</p>
+                  </div>
+                  <button type="button" (click)="addMateriau()" class="mini-action-btn">Ajouter</button>
                 </div>
+
+                <div formArrayName="materiaux" class="space-y-4">
+                  <div *ngFor="let group of materiaux.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i" class="entry-card">
+                    <div class="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_auto] gap-4 items-start">
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Type de materiau</mat-label>
+                        <input matInput formControlName="type_materiau" placeholder="Beton, acier, bois">
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Quantite (tonnes)</mat-label>
+                        <input matInput type="number" formControlName="quantite_tonnes" placeholder="120">
+                      </mat-form-field>
+
+                      <button type="button" (click)="removeMateriau(i)" class="remove-btn" [disabled]="materiaux.length === 1">
+                        Supprimer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="bg-[#10b981]/10 border border-[#10b981]/20 p-6 rounded-3xl flex items-start gap-5">
+              <div class="w-12 h-12 bg-[#10b981] rounded-2xl flex items-center justify-center shrink-0 shadow-glow">
+                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-black text-[#10b981] uppercase text-xs tracking-widest mb-1">Enregistrement asynchrone</h4>
+                <p class="text-gray-300 text-sm leading-relaxed">Le formulaire envoie les donnees via HTTP sans recharger la page, puis redirige vers le dashboard quand l'API confirme l'insertion.</p>
               </div>
             </div>
 
+            <div class="flex justify-end">
+              <button
+                type="button"
+                (click)="fetchAdemeRecommendations()"
+                [disabled]="isLoadingRecommendations"
+                class="premium-btn secondary px-8 py-3 rounded-2xl font-black uppercase text-xs tracking-[0.15em] disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {{ isLoadingRecommendations ? 'Interrogation ADEME...' : 'Recommandations ADEME' }}
+              </button>
+            </div>
+
+            <section *ngIf="recommendationData" class="ademe-panel">
+              <div class="ademe-panel__header">
+                <h3 class="ademe-panel__title">Synthese ADEME</h3>
+                <p class="ademe-panel__meta">
+                  Total estime: {{ recommendationData.summary?.total_estimated_tco2e }} tCO2e
+                  <span *ngIf="recommendationData.summary?.estimated_intensity_kgco2e_per_m2 !== null">
+                    | Intensite: {{ recommendationData.summary?.estimated_intensity_kgco2e_per_m2 }} kgCO2e/m2
+                  </span>
+                </p>
+              </div>
+
+              <div class="ademe-grid">
+                <article *ngFor="let hotspot of recommendationData.hotspots" class="ademe-card">
+                  <h4>{{ hotspot.input }}</h4>
+                  <p>{{ hotspot.estimated_kgco2e }} kgCO2e</p>
+                  <small>{{ hotspot.recommendation }}</small>
+                </article>
+              </div>
+
+              <div class="ademe-list">
+                <p *ngFor="let rec of recommendationData.recommendations">- {{ rec }}</p>
+              </div>
+            </section>
+
             <div class="flex justify-between items-center pt-6">
-              <button matStepperPrevious class="text-muted hover:opacity-100 font-black uppercase text-xs tracking-widest transition-colors">
+              <button matStepperPrevious type="button" class="text-gray-500 hover:text-white font-black uppercase text-xs tracking-widest transition-colors">
                 Retour
               </button>
-              <button (click)="submit()" class="premium-btn primary px-12 py-5 rounded-2xl font-black uppercase text-sm tracking-[0.2em] shadow-glow">
-                Générer l'Analyse
+              <button type="button" (click)="submit()" [disabled]="isSubmitting" class="premium-btn primary px-12 py-5 rounded-2xl font-black uppercase text-sm tracking-[0.2em] shadow-glow disabled:opacity-60 disabled:cursor-not-allowed">
+                {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer le site' }}
               </button>
             </div>
           </form>
@@ -169,4 +233,3 @@
     </div>
   </div>
 </div>
-

@@ -20,13 +20,30 @@ html {
 }
 
 /* =====================================
-   Theme tokens (dark default)
-   Applied via CSS variables, overridden
+   Theme tokens (LIGHT MODE DEFAULT - White 100%)
+   Applied via CSS variables
    ===================================== */
 :root {
+  --app-bg: #ffffff;
+  --app-text: #0f172a;
+  --app-muted: #64748b;
+  --app-muted-2: #94a3b8;
+  --app-border: rgba(15, 23, 42, 0.12);
+  --app-panel: rgba(255, 255, 255, 0.95);
+  --app-card: #f8fafc;
+  --app-card-2: #f1f5f9;
+  --app-elev: rgba(0, 0, 0, 0.08);
+
+  --app-accent: #10b981;
+  --app-accent-strong: #059669;
+  --app-on-accent: #ffffff;
+  --app-danger: #ef4444;
+}
+
+/* Dark mode optionnel (désactivé par défaut) */
+html.theme-dark {
   --app-bg: #0b0f19;
   --app-text: #f8fafc;
-  /* Muted text is intentionally brighter for readability (a11y) */
   --app-muted: #dbdbdb;
   --app-muted-2: rgba(219, 219, 219, 0.85);
   --app-border: rgba(255, 255, 255, 0.08);
@@ -35,24 +52,7 @@ html {
   --app-card-2: rgba(22, 27, 39, 0.40);
   --app-elev: rgba(0, 0, 0, 0.55);
 
-  --app-accent: #10b981;
-  --app-accent-strong: #059669;
   --app-on-accent: #0b0f19;
-  --app-danger: #ef4444;
-}
-
-html.theme-light {
-  --app-bg: #f8fafc;
-  --app-text: #0b1220;
-  --app-muted: rgba(15, 23, 42, 0.70);
-  --app-muted-2: rgba(15, 23, 42, 0.58);
-  --app-border: rgba(2, 6, 23, 0.12);
-  --app-panel: rgba(2, 6, 23, 0.04);
-  --app-card: rgba(2, 6, 23, 0.04);
-  --app-card-2: rgba(2, 6, 23, 0.03);
-  --app-elev: rgba(2, 6, 23, 0.16);
-
-  --app-on-accent: #062014;
 }
 
 body {
@@ -246,19 +246,19 @@ html.a11y-daltonism .shadow-glow {
 
 // Application de la charte graphique par défaut (géré par tokens au-dessus)
 
-/* Premium Scrollbar */
+/* Premium Scrollbar - Light Mode */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: var(--app-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.2);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #10b981;
+  background: var(--app-accent);
 }
 
 /* Global Premium Animations */
@@ -299,32 +299,32 @@ html.a11y-daltonism .shadow-glow {
   animation: gradient-x 15s ease infinite;
 }
 
-/* Common UI Patterns */
+/* Common UI Patterns - Light Mode */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.03) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
 }
 
 .premium-glow {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
 }
 
-/* Premium Toast Styles */
+/* Premium Toast Styles - Light Mode */
 .error-snackbar {
-  --mdc-snackbar-container-color: rgba(220, 38, 38, 0.9) !important;
+  --mdc-snackbar-container-color: rgba(220, 38, 38, 0.95) !important;
   --mdc-snackbar-supporting-text-color: white !important;
   backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
   border-radius: 12px !important;
 }
 
 .success-snackbar {
-  --mdc-snackbar-container-color: rgba(16, 185, 129, 0.9) !important;
+  --mdc-snackbar-container-color: rgba(16, 185, 129, 0.95) !important;
   --mdc-snackbar-supporting-text-color: #0b0f19 !important;
   font-weight: 700 !important;
   backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
   border-radius: 12px !important;
 }
 /* Ngx Charts Legend Customization */
@@ -365,19 +365,19 @@ html.a11y-daltonism .shadow-glow {
   }
 }
 
-/* ApexCharts Customization */
+/* ApexCharts Customization - Light Mode */
 .apexcharts-canvas {
   .apexcharts-tooltip {
-    background: rgba(15, 23, 42, 0.9) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
     border-radius: 12px !important;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
-    color: white !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2) !important;
+    color: #0f172a !important;
     
     .apexcharts-tooltip-title {
-      background: rgba(255, 255, 255, 0.05) !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      background: rgba(15, 23, 42, 0.05) !important;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.1) !important;
       font-weight: 800 !important;
       text-transform: uppercase !important;
       letter-spacing: 0.1em !important;
@@ -387,17 +387,17 @@ html.a11y-daltonism .shadow-glow {
   }
 
   .apexcharts-xaxistooltip {
-    background: rgba(15, 23, 42, 0.9) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: white !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
+    color: #0f172a !important;
     border-radius: 8px !important;
   }
 
   .apexcharts-menu {
-    background: rgba(15, 23, 42, 0.95) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
     backdrop-filter: blur(10px) !important;
-    color: white !important;
+    color: #0f172a !important;
     border-radius: 12px !important;
     padding: 8px !important;
     
@@ -407,12 +407,12 @@ html.a11y-daltonism .shadow-glow {
       border-radius: 6px !important;
       &:hover {
         background: #10b981 !important;
-        color: black !important;
+        color: white !important;
       }
     }
   }
 }
 
 .shadow-glow {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
 }

@@ -5,6 +5,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { AddSiteComponent } from './pages/add-site/add-site.component';
 import { SiteListComponent } from './pages/site-list/site-list.component';
 import { SiteDetailComponent } from './pages/site-detail/site-detail.component';
+import { SolutionsComponent } from './pages/solutions/solutions.component';
+import { ReglementationComponent } from './pages/reglementation/reglementation.component';
 import { AuthService } from './services/auth.service';
 import { map, take } from 'rxjs';
 
@@ -19,6 +21,8 @@ const authGuard = () => {
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'solutions', component: SolutionsComponent },
+  { path: 'reglementation', component: ReglementationComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'add-site', component: AddSiteComponent, canActivate: [authGuard] },
   { path: 'sites', component: SiteListComponent, canActivate: [authGuard] },

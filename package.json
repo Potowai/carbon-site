@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@ngx-env/builder": "^21.0.1",
+    "@types/node": "^25.5.0"
+  }
+}

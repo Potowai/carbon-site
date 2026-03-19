@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+.glass-panel {
+  background: var(--app-panel);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--app-border);
+  box-shadow: 0 25px 50px -12px var(--app-elev);
+}
+
+.shadow-glow {
+  box-shadow: 0 10px 40px -10px rgba(16, 185, 129, 0.4);
+}

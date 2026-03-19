@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { SiteService } from '../../services/site.service';
 import { PdfExportService } from '../../services/pdf-export.service';
+import { AiExplanationService, DashboardContext } from '../../services/ai-explanation.service';
+import { AiAssistantButtonComponent } from '../../components/ai-assistant-button/ai-assistant-button.component';
 import { Observable, forkJoin } from 'rxjs';
-import { LucideAngularModule, Building2, LayoutDashboard, Database, LogOut, Filter, Calendar, Download, RefreshCw } from 'lucide-angular';
+import { LucideAngularModule, Sparkles, Send, Building2, LayoutDashboard, Database, LogOut, Filter, Calendar, Download, RefreshCw } from 'lucide-angular';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -47,9 +50,11 @@ export type ChartOptions = {
   imports: [
     CommonModule, 
     RouterLink, 
+    FormsModule,
     NgApexchartsModule, 
     MatSnackBarModule, 
-    LucideAngularModule
+    LucideAngularModule,
+    AiAssistantButtonComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -61,6 +66,14 @@ export class DashboardComponent implements OnInit {
   isMenuOpen = false;
   sites: any[] = [];
   loadingSites = true;
+  
+  // AI Explanation properties
+  aiToken: string = '';
+  aiQuestion: string = '';
+  aiResponse: string = '';
+  aiLoading: boolean = false;
+  aiPanelOpen: boolean = false;
+  showTokenInput: boolean = true;
   
   // Filters
   selectedTimeRange = '30d'; // '7d', '30d', '1y'
@@ -84,10 +97,21 @@ export class DashboardComponent implements OnInit {
     domain: ['#10b981', '#3b82f6', '#06b6d4', '#64748b']
   };
 
+  get hasValidCarbonTrend(): boolean {
+    return Array.isArray(this.carbonTrend) &&
+      this.carbonTrend.length > 0 &&
+      this.carbonTrend.every((serie: any) => Array.isArray(serie?.series));
+  }
+
+  get hasValidMaterialDistribution(): boolean {
+    return Array.isArray(this.materialDistribution) && this.materialDistribution.length > 0;
+  }
+
   constructor(
     private auth: AuthService, 
     private siteService: SiteService,
     private pdfExportService: PdfExportService,
+    private aiService: AiExplanationService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
@@ -106,6 +130,72 @@ export class DashboardComponent implements OnInit {
         this.loadingSites = false;
       }
     });
+  }
+
+  private toNumber(value: unknown): number {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  private normalizeTrendData(input: unknown): any[] {
+    if (Array.isArray(input)) {
+      if (input.length > 0 && input[0] && Array.isArray(input[0].series)) {
+        return input
+          .map((serie: any) => ({
+            name: serie?.name ?? 'Serie',
+            series: Array.isArray(serie?.series)
+              ? serie.series.map((point: any, index: number) => ({
+                name: point?.name ?? point?.label ?? point?.x ?? `Point ${index + 1}`,
+                value: this.toNumber(point?.value ?? point?.y ?? 0)
+              }))
+              : []
+          }))
+          .filter((serie: any) => serie.series.length > 0);
+      }
+
+      return [
+        {
+          name: 'Emissions',
+          series: input.map((item: any, index: number) => ({
+            name: item?.name ?? item?.label ?? item?.x ?? `Point ${index + 1}`,
+            value: this.toNumber(item?.value ?? item?.y ?? item)
+          }))
+        }
+      ];
+    }
+
+    if (input && typeof input === 'object') {
+      const entries = Object.entries(input as Record<string, unknown>);
+      return [
+        {
+          name: 'Emissions',
+          series: entries.map(([key, value]) => ({
+            name: key,
+            value: this.toNumber(value)
+          }))
+        }
+      ];
+    }
+
+    return [];
+  }
+
+  private normalizePieData(input: unknown): any[] {
+    if (Array.isArray(input)) {
+      return input.map((item: any, index: number) => ({
+        name: item?.name ?? item?.label ?? `Categorie ${index + 1}`,
+        value: this.toNumber(item?.value ?? item)
+      })).filter((item: any) => Number.isFinite(item.value));
+    }
+
+    if (input && typeof input === 'object') {
+      return Object.entries(input as Record<string, unknown>).map(([key, value]) => ({
+        name: key,
+        value: this.toNumber(value)
+      })).filter((item: any) => Number.isFinite(item.value));
+    }
+
+    return [];
   }
 
   initChartOptions() {
@@ -445,5 +535,99 @@ export class DashboardComponent implements OnInit {
         panelClass: ['error-snackbar']
       });
     }
+  }
+
+  // ========== AI EXPLANATION METHODS ==========
+  
+  toggleAiPanel() {
+    this.aiPanelOpen = !this.aiPanelOpen;
+  }
+
+  onAiPanelOpen() {
+    console.log('[Dashboard] AI Panel opened');
+    this.aiPanelOpen = true;
+  }
+
+  onAiPanelClose() {
+    console.log('[Dashboard] AI Panel closed');
+    this.aiPanelOpen = false;
+  }
+
+  askAI() {
+    if (!this.aiQuestion.trim()) {
+      this.snackBar.open('Veuillez entrer une question.', 'Fermer', { 
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    // Le token sera récupéré depuis les variables d'environnement côté backend
+    // ou configuré globalement dans l'application
+    const token = (window as any).ENV?.OPENROUTER_API_KEY || '';
+    
+    if (!token) {
+      this.snackBar.open('Token API non configuré. Veuillez contacter l\'administrateur.', 'Fermer', { 
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    this.aiLoading = true;
+    this.aiResponse = '';
+
+    const context = this.getDashboardContextForAI();
+
+    this.aiService.explainDashboardData(this.aiQuestion, context).subscribe({
+      next: (response) => {
+        this.aiResponse = response.response;
+        this.aiLoading = false;
+      },
+      error: (error) => {
+        this.aiLoading = false;
+        this.snackBar.open(error.message || 'Erreur lors de la communication avec l\'IA', 'Fermer', { 
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
+
+  private getDashboardContextForAI(): DashboardContext {
+    const distData = this.stats?.material_distribution?.data || this.materialDistribution || [];
+    const trendData = this.stats?.trend_data || [];
+    
+    return {
+      total_footprint: this.stats?.total_footprint || 0,
+      carbon_intensity: this.stats?.carbon_intensity || 0,
+      global_score: this.stats?.global_score || 0,
+      active_sites: this.stats?.active_sites || 0,
+      avg_surface: this.stats?.avg_surface || 0,
+      material_distribution: distData,
+      trend_data: trendData,
+      currency: this.stats?.currency || 'tCO2e',
+      unit: this.stats?.unit || 'kg/m²'
+    };
+  }
+
+  clearAIResponse() {
+    this.aiResponse = '';
+    this.aiQuestion = '';
+  }
+
+  getSuggestedQuestions(): string[] {
+    return [
+      'Explique-moi ce que veulent dire les données tCO2e',
+      'Qu\'est-ce que l\'intensité carbone et pourquoi est-elle importante ?',
+      'Mon score RE2020 est-il bon ?',
+      'Que représente la répartition des matériaux ?',
+      'Comment interpréter la tendance des émissions ?',
+      'Quels sont les leviers d\'amélioration pour réduire mon empreinte ?'
+    ];
+  }
+
+  useSuggestedQuestion(question: string) {
+    this.aiQuestion = question;
   }
 }

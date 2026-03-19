@@ -11,8 +11,8 @@
           class="text-[var(--app-accent)]">Site</span> <span class="btn-ghost px-2 py-0.5 rounded ml-1 not-italic text-[10px] lg:text-sm">PRO</span></span>
     </div>
     <div class="flex items-center gap-4 lg:gap-8 text-xs lg:text-sm font-medium text-muted">
-      <a href="#" class="hidden sm:inline hover:text-[var(--app-accent)] transition-colors">Solutions</a>
-      <a href="#" class="hidden lg:inline hover:text-[var(--app-accent)] transition-colors">Réglementation</a>
+      <a routerLink="/solutions" class="hidden sm:inline hover:text-[var(--app-accent)] transition-colors">Solutions</a>
+      <a routerLink="/reglementation" class="hidden lg:inline hover:text-[var(--app-accent)] transition-colors">Réglementation</a>
       <button (click)="toggleMode()"
         class="hidden sm:block px-4 py-2 lg:px-5 lg:py-2 rounded-lg btn-ghost transition-all text-[10px] lg:text-xs font-black uppercase tracking-widest">
         {{ isLogin ? 'S\'inscrire' : 'Connexion' }}
@@ -30,8 +30,8 @@
     <!-- Mobile Menu Overlay -->
     <div class="absolute top-full left-0 w-full p-6 animate-slide-down sm:hidden" *ngIf="isMenuOpen">
       <div class="glass-panel p-6 rounded-3xl flex flex-col gap-4 shadow-2xl">
-        <a href="#" class="font-bold uppercase tracking-widest text-xs py-2">Solutions</a>
-        <a href="#" class="font-bold uppercase tracking-widest text-xs py-2">Réglementation</a>
+        <a routerLink="/solutions" class="font-bold uppercase tracking-widest text-xs py-2">Solutions</a>
+        <a routerLink="/reglementation" class="font-bold uppercase tracking-widest text-xs py-2">Réglementation</a>
         <button (click)="toggleMode(); isMenuOpen = false"
           class="w-full py-4 rounded-xl bg-accent font-black uppercase tracking-widest text-xs shadow-glow">
           {{ isLogin ? 'S\'inscrire' : 'Connexion' }}
@@ -83,8 +83,8 @@
 
         <!-- Description -->
         <p class="text-muted text-base lg:text-lg leading-relaxed max-w-xl">
-          La seule plateforme BTP combinant <span class="text-white font-semibold">intelligence artificielle</span> et
-          <span class="text-white font-semibold">données FDES</span> pour réduire l'empreinte de vos chantiers jusqu'à
+          La seule plateforme BTP combinant <span class="text-[#10b981] font-semibold">intelligence artificielle</span> et
+          <span class="text-[#10b981] font-semibold">données FDES</span> pour réduire l'empreinte de vos chantiers jusqu'à
           <span class="text-[#10b981] font-black">-30%</span>.
         </p>
 
@@ -118,7 +118,7 @@
 
           <!-- Form Header -->
           <div class="mb-10">
-            <h2 class="text-2xl lg:text-3xl font-black tracking-tight leading-tight">{{ isLogin ? 'Access Portal' : 'Join the Elite' }}</h2>
+            <h2 class="text-2xl lg:text-3xl font-black tracking-tight leading-tight">{{ isLogin ? 'Portail de connexion' : 'Rejoignez l\'élite' }}</h2>
             <div class="h-1 w-16 bg-gradient-to-r from-[#10b981] to-[#34d399] rounded-full mt-3"></div>
           </div>
 
@@ -170,7 +170,7 @@
           <!-- Footer -->
           <div class="mt-8 pt-6 border-t border-white/10">
             <p class="text-xs text-muted text-center mb-3">
-              Besoin d'aide ? <a href="#" class="text-white/70 hover:text-white transition-colors font-medium">Contactez le Support</a>
+              Besoin d'aide ? <a href="#" class="text-[#10b981] hover:text-[#10b981]/80 transition-colors font-medium">Contactez le Support</a>
             </p>
             <button 
               (click)="toggleMode()"

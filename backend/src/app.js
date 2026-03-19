@@ -9,6 +9,7 @@ require('dotenv').config();
 
 const siteRoutes = require('./routes/site.routes');
 const configRoutes = require('./routes/config.routes');
+const aiRoutes = require('./routes/ai.routes');
 const errorHandler = require('./middlewares/error');
 
 const app = express();
@@ -85,6 +86,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes
 app.use('/api/config', configRoutes);
 app.use('/api/sites', siteRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Route de santé
 app.get('/health', async (_req, res) => {
